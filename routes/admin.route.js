@@ -2,10 +2,12 @@ var express = require('express');
 var router = express.Router();
 const verifyToken= require ('../middleware/validtoken.middleware');
 
-router.use(verifyToken);
+const role= require ('../middleware/checkrole.middleware');
 
-router.get('/dashboard', function(req, res, next) {
-  res.render('admin/dashboard');
+// router.use(role('admin'));
+
+router.get('/dashboard', verifyToken, role('admin'), function(req, res, next) {
+  res.render('admin/dashboard'); 
 });
 
 
