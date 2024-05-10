@@ -36,7 +36,6 @@
 
    ```bash
    npx sequelize-cli db:migrate
-
    ```
 
 6. **Jalankan seeder untuk mengirim data contoh ke dbL**
@@ -55,6 +54,7 @@
 8. **Untuk push perubahan silahkan buatlah branch baru terlebih dahulu**
 
    ```bash
+   git branch (nama_branch) //buat branch baru
    git checkout (nama_branch)
    git add .
    git commit -m "lihat profil"
