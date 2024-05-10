@@ -8,13 +8,19 @@
    git clone https://github.com/Habiboys/Web-Pendaftaran-Semester-Pendek
    ```
 
-2. **Install semua depedensi yang diperlukan**
+2. **Cd ke folder project**
+
+   ```bash
+   cd Web-Pendaftaran-Semester-Pendek
+   ```
+
+3. **Install semua depedensi yang diperlukan**
 
    ```bash
    npm install
    ```
 
-3. **Hidupkan MySQL XAMPP dan buat database & setting koneksi db pada config/config.json**
+4. **Hidupkan MySQL XAMPP dan buat database & setting koneksi db pada config/config.json**
 
    ```bash
    "development": {
@@ -26,27 +32,27 @@
    }
    ```
 
-4. **Lakukan migrasi tabel dari Express ke MySQL**
+5. **Lakukan migrasi tabel dari Express ke MySQL**
 
    ```bash
    npx sequelize-cli db:migrate
 
    ```
 
-5. **Jalankan seeder untuk mengirim data contoh ke dbL**
+6. **Jalankan seeder untuk mengirim data contoh ke dbL**
 
    ```bash
    npx sequelize-cli db:seed:all
    ```
 
-6. **Jalankan Express dengan perintah**
+7. **Jalankan Express dengan perintah**
 
    ```bash
    npm run dev # untuk pengembangan
    npm run start # untuk menjalankan sekali
    ```
 
-7. **Untuk push perubahan silahkan buatlah branch baru terlebih dahulu**
+8. **Untuk push perubahan silahkan buatlah branch baru terlebih dahulu**
 
    ```bash
    git checkout (nama_branch)

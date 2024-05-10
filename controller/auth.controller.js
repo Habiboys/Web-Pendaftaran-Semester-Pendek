@@ -3,10 +3,7 @@ const bcrypt = require("bcrypt");
 const { User } = require("../models/index");
 
 const form = (req, res) => {
-  
-
-  
-  res.render("login", { title: "Express" });
+  res.render("login");
 };
 
 const checklogin = async (req, res) => {
