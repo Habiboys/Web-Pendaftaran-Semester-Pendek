@@ -43,9 +43,9 @@ const checklogin = async (req, res) => {
     if (foundUser.role == "mahasiswa"){
       return res.redirect("/home");
     } else if (foundUser.role == "dosen"){
-      return res.redirect("/dosen/home");
+      return res.redirect("/dosen/dashboard");
     } else if(foundUser.role == "admin"){
-      return res.redirect("/admin/home");
+      return res.redirect("/admin/dashboard");
     }
 
     // Jika tidak ada peran yang cocok, berikan respons standar
