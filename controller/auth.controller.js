@@ -13,14 +13,14 @@ const checklogin = async (req, res) => {
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User tidak ada" });
     }
 
     // Verifikasi password
     const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!isValidPassword) {
-      return res.status(401).json({ message: "Invalid password" });
+      return res.status(401).json({ message: "password salah" });
     }
 
     // Buat token JWT
@@ -55,6 +55,14 @@ function logout(req, res) {
   res.clearCookie("token");
   res.redirect("/auth/login");
  
+}
+
+const changePassword = async (req,res)=>{
+
+};
+
+const view_profile = async (req,res)=>{
+  
 }
 
 

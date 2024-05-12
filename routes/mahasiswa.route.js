@@ -1,23 +1,29 @@
 var express = require('express');
 var router = express.Router();
-const verifyToken= require ('../middleware/validtoken.middleware');
-const role= require ('../middleware/checkrole.middleware');
+const verifyTokenAndRole= require ('../middleware/verifyTokenAndRole.middleware');
+const controller = require ('../controller/mhs.controller');
+const ubahpassword = require ('../controller/changePassword.controller');
 
 
-router.get('/notfound', verifyToken, function(req, res, next) {
-  res.render('notfound');
+router.get('/', verifyTokenAndRole('mahasiswa'), function(req, res, next) {
+  res.render('mahasiswa/home');
 });
-
-// router.use(role('mahasiswa'));
-
-router.get('/home', verifyToken,role('mahasiswa'), function(req, res, next) {
+router.get('/home', verifyTokenAndRole('mahasiswa'), function(req, res, next) {
   res.render('mahasiswa/home');
 });
 
-router.get('/profile', verifyToken,role('mahasiswa'), function(req, res, next) {
-  res.render('mahasiswa/profilmahasiswa');
-});
 
+router.get('/profile', verifyTokenAndRole('mahasiswa'), controller.view_profile);
+router.get('/profile/ubah-password', verifyTokenAndRole('mahasiswa'), ubahpassword.view_form);
+router.post('/profile/ubah-password', verifyTokenAndRole('mahasiswa'), ubahpassword.changePassword);
+
+// router.get('/notfound', function(req, res, next) {
+//   res.render('notfound');
+// });
+
+// router.get('/tes', function(req, res, next) {
+//   res.render('admin/dashboard', { page: "user" });
+// });
 
 
 //

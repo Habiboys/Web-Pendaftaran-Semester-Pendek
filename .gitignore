@@ -1,3 +1,4 @@
 node_modules/
 public/stylesheets/output.css
 public/stylesheets/style.css
+src/output.css
