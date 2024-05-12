@@ -1,10 +1,11 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "pendaftaransp",
-    "host": "localhost",
-    "dialect": "mysql"
+ "username": "root",
+ "password": null,
+ "database": "pendaftaransp",
+ "host": "localhost",
+ "dialect": "mysql"
+
   },
   "test": {
     "username": "root",

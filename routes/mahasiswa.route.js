@@ -14,5 +14,11 @@ router.get('/home', verifyToken,role('mahasiswa'), function(req, res, next) {
   res.render('mahasiswa/home');
 });
 
+router.get('/profile', verifyToken,role('mahasiswa'), function(req, res, next) {
+  res.render('mahasiswa/profilmahasiswa');
+});
+
+
+
 //
 module.exports = router;
