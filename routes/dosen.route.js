@@ -11,9 +11,11 @@ router.get('/dashboard', verifyTokenAndRole('dosen'), function(req, res, next) {
 });
 
 
+
 router.get('/profile', verifyTokenAndRole('dosen'), controller.view_profile);
 
 router.get('/profile/ubah-password',  verifyTokenAndRole('dosen'), ubahpassword.view_form);
 router.post('/profile/ubah-password',  verifyTokenAndRole('dosen'), ubahpassword.changePassword);
+
 
 module.exports = router;

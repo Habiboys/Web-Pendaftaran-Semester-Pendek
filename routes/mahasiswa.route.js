@@ -12,6 +12,7 @@ router.get('/home', verifyTokenAndRole('mahasiswa'), function(req, res, next) {
   res.render('mahasiswa/home');
 });
 
+
 router.get('/profile', verifyTokenAndRole('mahasiswa'), controller.view_profile);
 router.get('/profile/ubah-password', verifyTokenAndRole('mahasiswa'), ubahpassword.view_form);
 router.post('/profile/ubah-password', verifyTokenAndRole('mahasiswa'), ubahpassword.changePassword);
