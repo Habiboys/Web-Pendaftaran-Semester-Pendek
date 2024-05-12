@@ -1,25 +1,19 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>login</title>
-    <link href="/stylesheets/output.css" rel="stylesheet" />
-  </head>
-  <body >
-
-
-    
     <main id="content" class="w-full max-w-md mx-auto p-6">
       <div class="mt-7 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-neutral-900 dark:border-neutral-700">
         <div class="p-4 sm:p-7">
           <div class="text-center">
-            <h1 class="block text-2xl font-bold text-gray-800 dark:text-white">Daftar Sp</h1>
+            <h1 class="block text-2xl font-bold text-gray-800 dark:text-white">Sign in</h1>
             <p class="mt-2 text-sm text-gray-600 dark:text-neutral-400">
-              Login Untuk Melanjutkan
-            
+              Don't have an account yet?
+              <a class="text-blue-600 decoration-2 hover:underline font-medium dark:text-blue-500" href="../examples/html/signup.html">
+                Sign up here
+              </a>
             </p>
           </div>
 
           <div class="mt-5">
+        
+            
 
             <!-- Form -->
             <form method="POST" action="/auth/checklogin">
@@ -76,9 +70,3 @@
         </div>
       </div>
     </main>
-<!-- asdasd -->
-
-
-    <script src="../node_modules/preline/dist/preline.js"></script>
-  </body>
-</html>

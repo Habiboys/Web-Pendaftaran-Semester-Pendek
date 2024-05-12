@@ -1,6 +1,6 @@
 # Web Pendaftaran Semester Pendek
 
-## Panduan Penggunaan
+## Configurasi Project
 
 1. **Clone repo ini**
 
@@ -44,27 +44,20 @@
    npx sequelize-cli db:seed:all
    ```
 
-7. **Jalankan Express dengan perintah**
+7. **Jalankan Express dan tailwind di 2 terminal berbeda dengan perintah**
 
    ```bash
-   npm run dev # untuk pengembangan
-   npm run start # untuk menjalankan sekali
+   npm run dev # untuk menjalankan express
+   npm run tail # untuk menjalankan sekali
    ```
 
 8. **Untuk push perubahan silahkan buatlah branch baru terlebih dahulu**
 
    ```bash
-   git branch (nama_branch) //buat branch baru
-   git checkout (nama_branch)
+   git branch (ama_branch //buat branch baru
+   git checkout nama_branch
    git add .
-   git commit -m "lihat profil"
-   git push -u origin (nama_branch)
+   git commit -m "pesan"
+   git push -u origin nama_branch
    ```
 
-## Pembagian Tugas
-
-1. Authentikasi - Nouval Habibie ✅
-
-2. Lihat Profil untuk 3 level user (mahasiswa, admin, dosen)
-
-3. Fungsionalitas Ubah Kata Sandi untuk 3 Tingkatan Pengguna (mahasiswa, admin, dosen)
