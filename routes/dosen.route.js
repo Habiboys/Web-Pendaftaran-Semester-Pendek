@@ -9,4 +9,8 @@ router.get('/dashboard', verifyToken, role('dosen') , function(req, res, next) {
   res.render('dosen/dashboard');
 });
 
+router.get('/profile', verifyToken, role('dosen') , function(req, res, next) {
+  res.render('dosen/profildosen');
+});
+
 module.exports = router;
