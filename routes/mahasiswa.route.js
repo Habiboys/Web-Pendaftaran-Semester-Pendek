@@ -21,7 +21,7 @@ router.post('/profile/ubah-password', verifyTokenAndRole('mahasiswa'), ubahpassw
 // });
 
 // router.get('/tes', function(req, res, next) {
-//   res.render('admin/dashboard', { page: "user" });
+//   res.render('layout/admin', { page: "user" });
 // });
 
 

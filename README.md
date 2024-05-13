@@ -48,7 +48,7 @@
 
    ```bash
    npm run dev # untuk menjalankan express
-   npm run tail # untuk menjalankan sekali
+   npm run tail # untuk menjalankan tailwind
    ```
 
 8. **Untuk push perubahan silahkan buatlah branch baru terlebih dahulu**
