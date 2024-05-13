@@ -6,8 +6,8 @@ const isLogin = require('../middleware/islogin.middleware');
 
 
 
-router.get('/login', isLogin, controller.form);
 
+router.get('/login', isLogin, controller.form);
 router.post('/checklogin', controller.checklogin);
 router.post('/logout', controller.logout);
 module.exports = router;
