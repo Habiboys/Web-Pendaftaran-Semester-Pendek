@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ubah Password</title>
+
+  <style>
+    body {
+      background-color: #228B22;
+      font-family: sans-serif;
+      display: flex;
+      min-height: 100vh;
+      justify-content: center;
+      align-items: center; 
+    }
+
+    .container {
+      width: 500px;
+      padding: 20px;
+      background-color: #F0E6D6;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #4CAF50; 
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Ubah Password</h1>
+
+    <form method="POST", action="/auth/changepass">
+      <label for="passwordLama">Password Lama:</label>
+      <input type="password" id="passwordLama" name="passwordLama" required>
+
+      <label for="passwordBaru">Password Baru:</label>
+      <input type="password" id="passwordBaru" name="passwordBaru" required>
+
+      <button type="submit">Simpan</button>
+    </form>
+  </div>
+</body>
+</html>
