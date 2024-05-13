@@ -16,7 +16,7 @@ var mhsRouter = require('./routes/mahasiswa.route');
 var adminRouter = require('./routes/admin.route');
 var dosenRouter = require('./routes/dosen.route');
 var authRouter = require('./routes/auth.route');
-
+var profilRouter = require('./routes/lihatprofil')
 
 
 var app = express();
@@ -44,6 +44,7 @@ app.use('/', mhsRouter);
 app.use('/auth', authRouter);
 app.use('/admin', adminRouter);
 app.use('/dosen', dosenRouter);
+app.use('/profil', profilRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
