@@ -20,7 +20,7 @@ router.post('/profile/ubah-password',  verifyTokenAndRole('admin'), ubahpassword
 
 
 
-});
+
 
 
 
