@@ -1,6 +1,7 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
+var flash = require('connect-flash');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 require('dotenv').config()
@@ -20,8 +21,16 @@ var authRouter = require('./routes/auth.route');
 
 
 var app = express();
+app.use(flash());
+
 // app.use(publicRoutes);
 
+// app.use(session({
+//   secret: 'your_secret_key',
+//   resave: false,
+//   saveUninitialized: true,
+//   cookie: { secure: false } // Sesuaikan dengan konfigurasi keamanan Anda
+// }));
 
 
 
@@ -35,6 +44,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+// app.use(flash());
 
 
 
@@ -44,6 +54,15 @@ app.use('/', mhsRouter);
 app.use('/auth', authRouter);
 app.use('/admin', adminRouter);
 app.use('/dosen', dosenRouter);
+
+
+
+//pesan
+// app.use((req,res,next)=>{
+//   res.locals.error = req.flash('error');
+//   res.locals.success = req.flash('succes');
+//   next();
+// });
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

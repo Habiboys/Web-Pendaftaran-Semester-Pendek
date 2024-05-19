@@ -1,9 +1,13 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { User } = require("../models/index");
+const {  validationResult } = require('express-validator');
+
 
 const form = (req, res) => {
-  res.render("login");
+  console.log(req.cookies.pesan); 
+  res.render("login",  {message: req.cookies.pesan} );
+
 };
 
 const checklogin = async (req, res) => {
@@ -11,16 +15,27 @@ const checklogin = async (req, res) => {
   try {
     // Menggunakan nama variabel lain untuk menyimpan hasil pencarian user
     const user = await User.findOne({ where: { email } });
-
+    const notValidation = validationResult (req);
+    if (!notValidation.isEmpty()){
+      res.cookie("pesan", notValidation.array()[0].msg, {maxAge: 1000, httpOnly: true })
+      return res.redirect("/auth/login");
+    }
+  
     if (!user) {
-      return res.status(404).json({ message: "User tidak ada" });
+      const message = 'email atau password salah'; 
+      res.cookie("pesan", message, {maxAge: 1000, httpOnly: true });
+      return res.redirect("/auth/login");
+      // return res.status(404).json({ message: "User tidak ada" });
     }
 
     // Verifikasi password
     const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!isValidPassword) {
-      return res.status(401).json({ message: "password salah" });
+      const message = 'email atau password salah'; 
+      res.cookie("pesan", message, {maxAge: 1000, httpOnly: true });
+      return res.redirect("/auth/login");
+      // return res.status(401).json({ message: "password salah" });
     }
 
     // Buat token JWT
@@ -32,6 +47,7 @@ const checklogin = async (req, res) => {
 
     // Set cookie dengan token
     res.cookie("token", token, { httpOnly: true });
+ 
 
     // Redirect ke halaman sesuai dengan peran pengguna
     if (user.role == "mahasiswa"){

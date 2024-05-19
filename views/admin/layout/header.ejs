@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="emerald">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Template</title>
+    <link href="/stylesheets/output.css" rel="stylesheet" />
+  </head>
+  <body class="h-screen">
+    <div class="flex  h-full">
+      <div class="bg-base-200 text-base-content p-4 pt-8 h-full overflow-y-auto">
+        <h2 class="text-2xl font-bold mb-4 text-center"><a href="/admin/dashboard">Daftar SP</a></h2>
+        <ul class="menu p-0 w-64">
+          <li
+            class="<% if (page == 'Dashboard') { %> <%= 'bg-primary text-primary-content rounded-lg my-1' %> <% } %>"
+          >
+            <a class="flex items-center py-3" href="/admin/dashboard">
+              <hero-icon name="home" class="h-5 w-5 mr-2" />
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li
+            class="<% if (page == 'Mata Kuliah') { %> <%= 'bg-primary text-primary-content rounded-lg my-1' %> <% } %>"
+          >
+            <a class="flex items-center py-3" href="/admin/mata-kuliah">
+              <hero-icon name="user-group" class="h-5" />
+              <span>Mata Kuliah</span>
+            </a>
+          </li>
+          <li class="my-1">
+            <a class="flex items-center py-3">
+              <hero-icon name="collection" class="h-5 w-5 mr-2" />
+              <span>Products</span>
+            </a>
+          </li>
+          <li class="my-1">
+            <a class="flex items-center py-3">
+              <hero-icon name="shopping-cart" class="h-5 w-5 mr-2" />
+              <span>Orders</span>
+            </a>
+          </li>
+          <li class="my-1">
+            <a class="flex items-center py-3">
+              <hero-icon name="chart-bar" class="h-5 w-5 mr-2" />
+              <span>Reports</span>
+            </a>
+          </li>
+          <li class="my-1">
+            <a class="flex items-center py-3">
+              <hero-icon name="cog" class="h-5 w-5 mr-2" />
+              <span>Settings</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="flex-1">
+    <!-- navbar -->
+    <div class="navbar bg-primary ">
+        <div class="flex-1">
+          <a class="btn btn-ghost text-xl text-white" href="/<%= page %>"><%= page %></a>
+        </div>
+        <div class="flex-none">
+          <ul class="menu menu-horizontal px-1 text-white">
+            <li>Admin</li>
+          </ul>
+          <div class="dropdown dropdown-end mr-5">
+            <div
+              tabindex="0"
+              role="button"
+              class="btn btn-ghost btn-circle avatar"
+            >
+              <div class="w-10 rounded-full ">
+                <img
+                  alt="Tailwind CSS Navbar component"
+                  src="/images/student2.png"
+                />
+              </div>
+            </div>
+            <ul
+              tabindex="0"
+              class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+            >
+            <li><a href=""><%= user.email %></a></li>
+              <li>
+                <a class="justify-between" href="/admin/profile/ubah-password">Ubah password </a>
+              </li>
+              <li>
+                  <form method="POST" action="/auth/logout">
+                      <button type="submit">Logout</button>
+                    </form>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    <div
+          class="flex-1 p-4 bg-stripes-white bg-stripes-vertical rounded-box overflow-y-auto mr-6 ml-6"
+        >
