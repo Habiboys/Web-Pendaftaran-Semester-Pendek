@@ -1,0 +1,58 @@
+      
+        </div>
+    </div>
+    <div class="drawer-side">
+      <label for="my-drawer" class="drawer-overlay"></label>
+      <div
+        class="bg-base-200 text-base-content p-4 pt-8 h-full overflow-y-auto"
+      >
+        <h2 class="text-2xl font-bold mb-4">Daftar SP</h2>
+        <ul class="menu p-0 w-64">
+          <li
+            class="<% if (page == 'Dashboard') { %> <%= 'bg-primary text-primary-content rounded-lg my-1' %> <% } %>"
+          >
+            <a class="flex items-center py-3" href="/admin/dashboard">
+              <hero-icon name="home" class="h-5 w-5 mr-2" />
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li
+            class="<% if (page == 'User') { %> <%= 'bg-primary text-primary-content rounded-lg my-1' %> <% } %>"
+          >
+            <a class="flex items-center py-3">
+              <hero-icon name="user-group" class="h-5 w-5 mr-2" />
+              <span>Users</span>
+            </a>
+          </li>
+          <li class="my-1">
+            <a class="flex items-center py-3">
+              <hero-icon name="collection" class="h-5 w-5 mr-2" />
+              <span>Products</span>
+            </a>
+          </li>
+          <li class="my-1">
+            <a class="flex items-center py-3">
+              <hero-icon name="shopping-cart" class="h-5 w-5 mr-2" />
+              <span>Orders</span>
+            </a>
+          </li>
+          <li class="my-1">
+            <a class="flex items-center py-3">
+              <hero-icon name="chart-bar" class="h-5 w-5 mr-2" />
+              <span>Reports</span>
+            </a>
+          </li>
+          <li class="my-1">
+            <a class="flex items-center py-3">
+              <hero-icon name="cog" class="h-5 w-5 mr-2" />
+              <span>Settings</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  
+</body>
+</html>

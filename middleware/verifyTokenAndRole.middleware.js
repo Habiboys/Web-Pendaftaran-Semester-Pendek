@@ -17,6 +17,7 @@ function verifyTokenAndRole(role) {
       req.userId = decoded.id;
       req.userRole = decoded.role; 
       req.userEmail = decoded.email;
+      req.message = 'halo';
 
       if (role && req.userRole !== role) {
         if (req.userRole == "mahasiswa") {

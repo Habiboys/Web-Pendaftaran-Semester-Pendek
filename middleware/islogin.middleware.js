@@ -18,6 +18,7 @@ function isLogin(req, res, next) {
       req.userId = decoded.id;
       req.userRole = decoded.role;
       req.userEmail = decoded.email;
+ 
     });
     if (req.userRole == "mahasiswa") {
       return res.redirect("/home");
@@ -27,7 +28,7 @@ function isLogin(req, res, next) {
       return res.redirect("/admin/dashboard");
     }
   }
-
+ 
   next();
 }
 

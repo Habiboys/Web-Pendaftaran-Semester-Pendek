@@ -5,15 +5,9 @@ const controller = require ('../controller/dosen.controller');
 const ubahpassword = require ('../controller/changePassword.controller');
 
 
-
-router.get('/dashboard', verifyTokenAndRole('dosen'), function(req, res, next) {
-  res.render('dosen/dashboard');
-});
-
-
-
+router.get('/dashboard', verifyTokenAndRole('dosen'),  controller.dashboard);
+router.get('/mata-kuliah', verifyTokenAndRole('dosen'),  controller.matkul);
 router.get('/profile', verifyTokenAndRole('dosen'), controller.view_profile);
-
 router.get('/profile/ubah-password',  verifyTokenAndRole('dosen'), ubahpassword.view_form);
 router.post('/profile/ubah-password',  verifyTokenAndRole('dosen'), ubahpassword.changePassword);
 

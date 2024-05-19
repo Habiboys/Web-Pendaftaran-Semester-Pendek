@@ -1,59 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Halaman Profil</title>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
-</head>
-<body>
-    <h1>Profil <%= user.Lecturer.name %> </h1>
-    <table>
-        <tr>
-            <th>Nama:</th>
-            <td><%= user.Lecturer.name %></td>
-        </tr>
-        <tr>
-            <th>NIP:</th>
-            <td><%= user.Lecturer.nip %></td>
-        </tr>
-        <tr>
-            <th>Email:</th>
-            <td><%= user.email %></td>
-        </tr>
-        <tr>
-            <th>Tanggal Lahir:</th>
-            <td><%= tanggalLahir  %></td>
-        </tr>
-        <tr>
-            <th>Telepon:</th>
-            <td><%= user.Lecturer.phone %></td>
-        </tr>
-        <tr>
-            <th>Jenis Kelamin:</th>
-            <td><%= user.Lecturer.gender %></td>
-        </tr>
-        <tr>
-            <th>Alamat:</th>
-            <td><%= user.Lecturer.address %></td>
-        </tr>
-    </table>
-    <br>
-    <form action="/dosen/profile/ubah-password" method="get">
-        <button>Ubah Password</button>
-    </form>
-</body>
-</html>
+<%- include('layout/header') %>
+<h1 class="text-3xl font-bold mb-4">Profil <%= user.Lecturer.name %></h1>
+<div class="overflow-x-auto">
+  <table class="table table-compact w-full">
+    <tbody>
+      <tr>
+        <th>Nama:</th>
+        <td><%= user.Lecturer.name %></td>
+      </tr>
+      <tr>
+        <th>NIP:</th>
+        <td><%= user.Lecturer.nip %></td>
+      </tr>
+      <tr>
+        <th>Email:</th>
+        <td><%= user.email %></td>
+      </tr>
+      <tr>
+        <th>Tanggal Lahir:</th>
+        <td><%= tanggalLahir %></td>
+      </tr>
+      <tr>
+        <th>Telepon:</th>
+        <td><%= user.Lecturer.phone %></td>
+      </tr>
+      <tr>
+        <th>Jenis Kelamin:</th>
+        <td><%= user.Lecturer.gender %></td>
+      </tr>
+      <tr>
+        <th>Alamat:</th>
+        <td><%= user.Lecturer.address %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<a href="/dosen/profile/ubah-password" class="btn btn-primary mt-4">Ubah Password</a>
+</div>
+    <%- include('layout/footer') %>
