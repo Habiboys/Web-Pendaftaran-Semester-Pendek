@@ -10,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Lecturer.belongsTo(models.User, { foreignKey: 'user_id'});
+      Lecturer.belongsTo(models.User, { foreignKey: 'userId'});
+      Lecturer.hasMany(models.Subject, { foreignKey: 'lecturerNip' });
     }
   }
   Lecturer.init({
@@ -19,11 +20,14 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true
     },
     name: DataTypes.STRING,
-    date_of_birth: DataTypes.DATE,
+    birth: DataTypes.DATE,
     phone: DataTypes.STRING,
-    gender: DataTypes.STRING,
+    gender:{
+      type: DataTypes.ENUM,
+      values: ["laki-laki", "perempuan"],
+    },
     address: DataTypes.STRING,
-    user_id: DataTypes.INTEGER
+    userId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Lecturer',

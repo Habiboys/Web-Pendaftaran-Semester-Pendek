@@ -32,41 +32,9 @@ module.exports = {
       {}
     );
 
-    await queryInterface.bulkInsert(
-      "Students",
-      [
-        {
-          nim: "2211521020",
-          name: "Muhammad Nouval Habibie",
-          date_of_birth: new Date("2004-02-18"),
-          phone: "082392331371",
-          gender: "Laki-laki",
-          address: "Padang",
-          user_id: 1,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ],
-      {}
-    );
+    
 
-    await queryInterface.bulkInsert(
-      "Lecturers",
-      [
-        {
-          nip: "123456789",
-          name: "Pak Dosen",
-          date_of_birth: new Date("1990-01-01"),
-          phone: "08123456789",
-          gender: "Laki-laki",
-          address: "Padang",
-          user_id: 3,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ],
-      {}
-    );
+    
 
 
 
@@ -75,7 +43,6 @@ module.exports = {
 
   async down(queryInterface, Sequelize) {
     await queryInterface.bulkDelete("Users", null, {});
-    await queryInterface.bulkDelete('Students', null, {});
-    await queryInterface.bulkDelete('Lecturers', null, {});
+
   },
 };

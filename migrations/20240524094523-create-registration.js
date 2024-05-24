@@ -2,39 +2,41 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Students", {
-      nim: {
-        type: Sequelize.STRING,
+    await queryInterface.createTable("Registrations", {
+      id: {
         allowNull: false,
+        autoIncrement: true,
         primaryKey: true,
+        type: Sequelize.INTEGER,
       },
-      name: {
+      subjectId: {
         type: Sequelize.STRING,
         allowNull: false,
+        references: {
+          model: "Subjects",
+          key: "id",
+        },
       },
-      birth: {
+      studentNim: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        references: {
+          model: "Students",
+          key: "nim",
+        },
+      },
+      date: {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      phone: {
+      paymentProof: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
-      gender: {
-        type: Sequelize.ENUM("laki-laki", "perempuan"),
+      status: {
+        type: Sequelize.ENUM("verify", "unverify"),
+        defaultValue: "unverify",
         allowNull: false,
-      },
-      address: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      userId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: "Users",
-          key: "id",
-        },
       },
       createdAt: {
         allowNull: false,
@@ -47,6 +49,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Students");
+    await queryInterface.dropTable("Registrations");
   },
 };

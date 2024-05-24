@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": null,
-    "database": "pendaftaransp",
+    "database": "daftarsp",
     "host": "localhost",
     "dialect": "mysql"
   },
