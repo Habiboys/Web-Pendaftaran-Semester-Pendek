@@ -2,39 +2,36 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Students", {
-      nim: {
-        type: Sequelize.STRING,
+    await queryInterface.createTable("Subjects", {
+      id: {
         allowNull: false,
         primaryKey: true,
+        type: Sequelize.STRING,
       },
       name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      birth: {
-        type: Sequelize.DATE,
-        allowNull: false,
-      },
-      phone: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      gender: {
-        type: Sequelize.ENUM("laki-laki", "perempuan"),
-        allowNull: false,
-      },
-      address: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      userId: {
+      credit: {
         type: Sequelize.INTEGER,
         allowNull: false,
+      },
+      semester: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      lecturerNip: {
+        type: Sequelize.STRING,
+        allowNull: false,
         references: {
-          model: "Users",
-          key: "id",
+          model: "Lecturers",
+          key: "nip",
         },
+      },
+      status: {
+        type: Sequelize.ENUM("active", "inactive"),
+        defaultValue: "inactive",
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
@@ -47,6 +44,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Students");
+    await queryInterface.dropTable("Subjects");
   },
 };

@@ -9,7 +9,7 @@ const view_profile = async (req,res)=>{
         include: Student
     });
 
-    const tanggalLahir = moment(user.Student.date_of_birth).format('DD MMMM YYYY');
+    const tanggalLahir = moment(user.Student.birth).format('DD MMMM YYYY');
     res.render('mahasiswa/profile', {user, tanggalLahir , title : 'Home' });
   
 }

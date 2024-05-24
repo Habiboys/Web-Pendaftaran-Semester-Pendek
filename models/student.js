@@ -11,7 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Student.belongsTo(models.User, { foreignKey: 'user_id'});
+      Student.belongsTo(models.User, { foreignKey: 'userId'});
+      Student.hasMany(models.Registration, { foreignKey: 'studentNim'});
     }
   }
   Student.init({
@@ -20,11 +21,14 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true
     },
     name: DataTypes.STRING,
-    date_of_birth: DataTypes.DATE,
+    birth: DataTypes.DATE,
     phone: DataTypes.STRING,
-    gender: DataTypes.STRING,
+    gender:{
+      type: DataTypes.ENUM,
+      values: ["laki-laki", "perempuan"],
+    },
     address: DataTypes.STRING,
-    user_id: DataTypes.INTEGER
+    userId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Student',

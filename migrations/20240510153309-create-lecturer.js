@@ -12,7 +12,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      date_of_birth: {
+      birth: {
         type: Sequelize.DATE,
         allowNull: false,
       },
@@ -21,14 +21,14 @@ module.exports = {
         allowNull: false,
       },
       gender: {
-        type: Sequelize.STRING,
+        type: Sequelize.ENUM("laki-laki", "perempuan"),
         allowNull: false,
       },
       address: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      user_id: {
+      userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
