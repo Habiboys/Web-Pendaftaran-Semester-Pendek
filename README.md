@@ -2,7 +2,7 @@
 
 ## Configurasi Project
 
-1. **Clone repo ini**
+1. **Clone repo**
 
    ```bash
    git clone https://github.com/Habiboys/Web-Pendaftaran-Semester-Pendek
@@ -26,19 +26,19 @@
    "development": {
     "username": "root",
     "password": null,
-    "database": "pendaftaransp",
+    "database": "daftarsp",
     "host": "localhost",
     "dialect": "mysql"
    }
    ```
 
-5. **Lakukan migrasi tabel dari Express ke MySQL**
+5. **Lakukan migrasi tabel dari express ke database**
 
    ```bash
    npx sequelize-cli db:migrate
    ```
 
-6. **Jalankan seeder untuk mengirim data contoh ke dbL**
+6. **Jalankan seeder untuk mengirim data ke database**
 
    ```bash
    npx sequelize-cli db:seed:all
@@ -54,10 +54,9 @@
 8. **Untuk push perubahan silahkan buatlah branch baru terlebih dahulu**
 
    ```bash
-   git branch (ama_branch //buat branch baru
-   git checkout nama_branch
+   git branch (namaBranch)//buat branch baru
+   git checkout namaBranch
    git add .
    git commit -m "pesan"
-   git push -u origin nama_branch
+   git push -u origin namaBranch
    ```
-
