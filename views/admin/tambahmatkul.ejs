@@ -1,0 +1,79 @@
+<%- include('layout/header') %>
+<!-- Konten utama di sini -->
+<h1 class="text-2xl font-bold mb-4 mt-6"> Tambah Mata Kuliah</h1>
+<form id="tambahmatkul">
+    <div class="form-control mb-4">
+      <label class="label" for="kode">Kode Mata Kuliah</label>
+      <input name="kode" type="text" id="kode" class="input input-bordered" placeholder="Masukkan kode mata kuliah" />
+    </div>
+    <div class="form-control mb-4">
+      <label class="label" for="namamatkul">Nama Mata Kuliah</label>
+      <input name="namamatkul" type="text" id="namamatkul" class="input input-bordered" placeholder="Masukkan nama mata kuliah" />
+    </div>
+    <div class="form-control mb-4">
+      <label class="label" for="dosen">Dosen</label>
+      <select name="dosen" id="dosen" class="select select-bordered">
+        <option disabled selected>Pilih Dosen</option>
+        <% dosen.forEach((dosen)=>{ %>
+      <option value="<%=dosen.nip%>"><%=dosen.name%><%=dosen.nip%></option>
+        <% }) %>
+      </select>
+    </div>
+    <div class="form-control mb-4">
+      <label class="label" for="semester">Semester</label>
+      <select name="semester" id="semester" class="select select-bordered">
+        <option disabled selected>Pilih semester</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+      </select>
+    </div>
+    <div class="form-control mb-4">
+      <label class="label" for="sks">SKS</label>
+      <select name="sks" id="sks" class="select select-bordered">
+        <option disabled selected>Pilih jumlah SKS</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Tambah</button>
+  </form>
+  <script>
+    const form = document.getElementById('tambahmatkul')
+    form.addEventListener('submit',async(event)=>{
+      event.preventDefault()
+      const kode=document.getElementById('kode').value
+      const namamatkul=document.getElementById('namamatkul').value
+      const dosen=document.getElementById('dosen').value
+      const semester=document.getElementById('semester').value
+      const sks=document.getElementById('sks').value
+
+      const respon= await fetch('/admin/tambahmatkul', {
+        method: 'POST', 
+        headers: {
+                'Content-type': 'application/json'
+            },
+        body:JSON.stringify({
+          kode:kode,
+          namamatkul:namamatkul,
+          dosen:dosen,
+          semester:semester,
+          sks:sks
+        })
+      })
+      const datatambahmatkul = await respon.json()
+      if(datatambahmatkul.success){
+        alert(datatambahmatkul.message)
+      }
+      else {
+        alert(datatambahmatkul.message)
+      }
+    })
+  </script>
+<%- include('layout/footer') %>
