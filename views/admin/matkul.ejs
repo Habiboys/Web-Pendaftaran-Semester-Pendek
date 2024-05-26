@@ -1,7 +1,76 @@
 <%- include('layout/header') %>
-<!-- Konten utama di sini -->
-<h1 class="text-2xl font-bold mb-4 mt-6"><%= page %></h1>
-
+<h1 class="text-2xl font-bold mb-4 mt-6">Daftar Mata Kuliah</h1>
+<input id="my-drawer" type="checkbox" class="drawer-toggle" />
+<div class="drawer-content">
+    <div class="flex-none">
+    </div>
+  </div>
+  <div class="p-4">
+    <div class="overflow-x-auto">
+      <table class="table w-full">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Mata Kuliah</th>
+            <th>Kode Mata Kuliah</th>
+            <th>Dosen</th>
+            <th>Semester</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% matkul.forEach((matkul,index)=>{ %>
+            <tr>
+              <td>
+                <%= index+1 %>
+              </td>
+              <td>
+                <%= matkul.name %>
+              </td>
+              <td>
+                <%= matkul.id %>
+              </td>
+              <td>
+                <%= matkul.Lecturer.name %>
+              </td>
+              <td>
+                <%= matkul.semester %>
+              </td>
+              <td>
+                <%= matkul.status %>
+              </td>
+              <td>
+                <button class="btn btn-sm btn-primary mr-2">Edit</button>
+                <button class="btn btn-sm btn-error"onclick="deleteMatkul('<%= matkul.id %>')">Hapus</button>
+              </td>
+            </tr>
+            <% })%>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<script src="../node_modules/preline/dist/preline.js"></script>
+<script>
+  async function deleteMatkul(id) {
+    if(confirm("Apakah Anda Yakin Menghapusnya?")){
+      try {
+        const respon = await fetch(`/admin/hapusmatkul/${id}`, {
+          method:'DELETE'
+        })
+        const hapus = await respon.json()
+        if(hapus.success) {
+          alert(hapus.message)
+          location.reload()
+        }
+        
+      } catch (error) {
+        alert('Ada Error')
+      }
+    }
+  }
+</script>
 
 <%- include('layout/footer') %>
    
