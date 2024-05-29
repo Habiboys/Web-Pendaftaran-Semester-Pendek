@@ -12,10 +12,15 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Subject.init({
+    id: {
+      type: DataTypes.STRING,
+      primaryKey: true
+    },
     name: DataTypes.STRING,
     credit: DataTypes.INTEGER,
     semester: DataTypes.INTEGER,
     lecturerNip: DataTypes.STRING,
+    capacity: DataTypes.INTEGER,
     status:{
       type: DataTypes.ENUM,
       values: ["active", "inactive"],

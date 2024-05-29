@@ -27,7 +27,10 @@ module.exports = (sequelize, DataTypes) => {
       values: ["laki-laki", "perempuan"],
     },
     address: DataTypes.STRING,
-    userId: DataTypes.INTEGER
+    userId: {
+      type: DataTypes.INTEGER,
+      unique: true,
+    },
   }, {
     sequelize,
     modelName: 'Lecturer',

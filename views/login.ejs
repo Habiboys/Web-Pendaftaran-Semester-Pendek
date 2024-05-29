@@ -30,8 +30,12 @@
             Silahkan login untuk melanjutkan
           </h1>
           <% if (message) { %>
-          <div class="bg-red-500 text-white p-3 rounded"><%= message %></div>
-          <% } %>
+            <div class="bg-red-500 text-white p-3 rounded">
+                    <% message.forEach(error => { %>
+                        <p><%= error.msg %></p>
+                    <% }); %>
+            </div>
+        <% } %>
           <label class="mt-7 input input-bordered flex items-center gap-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"

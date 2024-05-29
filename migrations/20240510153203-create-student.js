@@ -3,10 +3,19 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("Students", {
+      userId: {
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Users",
+          key: "id",
+        },
+      },
       nim: {
         type: Sequelize.STRING,
         allowNull: false,
-        primaryKey: true,
+        unique: true
       },
       name: {
         type: Sequelize.STRING,
@@ -28,14 +37,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      userId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: "Users",
-          key: "id",
-        },
-      },
+     
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

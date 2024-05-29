@@ -20,6 +20,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
+      capacity: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
       lecturerNip: {
         type: Sequelize.STRING,
         allowNull: false,

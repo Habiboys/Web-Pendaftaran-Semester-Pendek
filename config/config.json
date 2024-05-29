@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": null,
-    "database": "daftarsp",
+    "database": "pwebtes",
     "host": "localhost",
     "dialect": "mysql"
   },
