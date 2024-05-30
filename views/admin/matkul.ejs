@@ -1,76 +1,59 @@
 <%- include('layout/header') %>
-<h1 class="text-2xl font-bold mb-4 mt-6">Daftar Mata Kuliah</h1>
-<input id="my-drawer" type="checkbox" class="drawer-toggle" />
-<div class="drawer-content">
-    <div class="flex-none">
-    </div>
+<!-- Konten utama di sini -->
+<h1 class="text-2xl font-bold mb-4 mt-6"><%= page %></h1>
+<% if (success) { %>
+  <div class="bg-green-500 text-white p-3 rounded ">
+    <p><%= success %></p>
   </div>
-  <div class="p-4">
-    <div class="overflow-x-auto">
-      <table class="table w-full">
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>Mata Kuliah</th>
-            <th>Kode Mata Kuliah</th>
-            <th>Dosen</th>
-            <th>Semester</th>
-            <th>Status</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% matkul.forEach((matkul,index)=>{ %>
-            <tr>
-              <td>
-                <%= index+1 %>
-              </td>
-              <td>
-                <%= matkul.name %>
-              </td>
-              <td>
-                <%= matkul.id %>
-              </td>
-              <td>
-                <%= matkul.Lecturer.name %>
-              </td>
-              <td>
-                <%= matkul.semester %>
-              </td>
-              <td>
-                <%= matkul.status %>
-              </td>
-              <td>
-                <button class="btn btn-sm btn-primary mr-2">Edit</button>
-                <button class="btn btn-sm btn-error"onclick="deleteMatkul('<%= matkul.id %>')">Hapus</button>
-              </td>
-            </tr>
-            <% })%>
-        </tbody>
-      </table>
-    </div>
-  </div>
+<% } %>
+<div class="flex  justify-between mb-4 mt-4">
+  <a href="/admin/tambah-matkul" class="btn btn-primary ">Tambah Mata Kuliah</a>
 </div>
-<script src="../node_modules/preline/dist/preline.js"></script>
-<script>
-  async function deleteMatkul(id) {
-    if(confirm("Apakah Anda Yakin Menghapusnya?")){
-      try {
-        const respon = await fetch(`/admin/hapusmatkul/${id}`, {
-          method:'DELETE'
-        })
-        const hapus = await respon.json()
-        if(hapus.success) {
-          alert(hapus.message)
-          location.reload()
-        }
-        
-      } catch (error) {
-        alert('Ada Error')
-      }
-    }
-  }
-</script>
 
+<div class="overflow-x-auto">
+  <table class="table w-full">
+    <thead>
+      <tr>
+        <th>Kode Matkul</th>
+        <th>Nama</th>
+        <th>SKS</th>
+        <th>Semester</th>
+        <th>Dosen Pengampu</th>
+        <th>Pendaftar</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% matkul.forEach(subject => { %>
+      <tr>
+        <td><%= subject.id %></td>
+        <td><%= subject.name %></td>
+        <td><%= subject.credit %></td>
+        <td><%= subject.semester %></td>
+        <td><%= subject.Lecturer.name %></td>
+        <td>0/<%= subject.capacity %></td>
+        <td><%= subject.status %></td>
+        <td>
+          <div class="flex ">
+            <form action="" method="post">
+              <button type="submit" class="btn btn-sm btn-primary mr-2">
+                Tutup
+              </button>
+            </form>
+            <a
+              href="/admin/edit-matkul/<%= subject.id %>"
+              class="btn  btn-sm btn-warning mr-2"
+              >Edit</a
+            >
+            <form action="/admin/delete-matkul/<%= subject.id %>" method="post">
+              <button type="submit" class="btn btn-sm btn-error">Hapus</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
 <%- include('layout/footer') %>
-   

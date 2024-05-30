@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin</title>
     <link href="/stylesheets/output.css" rel="stylesheet" />
+    <link rel="icon" href="/images/logounand.png" type="image/x-icon">
   </head>
-  <body class="h-screen">
+  <body class="h-screen ">
     <div class="flex  h-full">
       <div class="bg-base-200 text-base-content p-4 pt-8 h-full overflow-y-auto">
         <h2 class="text-2xl font-bold mb-4 text-center"><a href="/admin/dashboard">Daftar SP</a></h2>
@@ -20,29 +21,29 @@
             </a>
           </li>
           <li
-            class="<% if (page == 'Mata Kuliah') { %> <%= 'bg-primary text-primary-content rounded-lg my-1' %> <% } %>"
+            class="<% if (page == 'Mata Kuliah' || page == 'Tambah Mata Kuliah' || page == 'Edit Mata Kuliah' ) { %> <%= 'bg-primary text-primary-content rounded-lg my-1' %> <% } %>"
           >
             <a class="flex items-center py-3" href="/admin/mata-kuliah">
               <hero-icon name="user-group" class="h-5" />
-              <span>Daftar Mata Kuliah</span>
-            </a>
-          </li>
-          <li class="my-1">
-            <a a class="flex items-center py-3" href="/admin/tambah-mata-kuliah">
-              <hero-icon name="user-group" class="h-5" />
-              <span>Tambah Mata Kuliah</span>
+              <span>Mata Kuliah</span>
             </a>
           </li>
           <li class="my-1">
             <a class="flex items-center py-3">
-              <hero-icon name="user-group" class="h-5" />
-              <span>Daftar Pendaftar</span>
+              <hero-icon name="collection" class="h-5 w-5 mr-2" />
+              <span>Products</span>
             </a>
           </li>
           <li class="my-1">
             <a class="flex items-center py-3">
-              <hero-icon name="user-group" class="h-5" />
-              <span>Daftar Mahasiswa</span>
+              <hero-icon name="shopping-cart" class="h-5 w-5 mr-2" />
+              <span>Orders</span>
+            </a>
+          </li>
+          <li class="my-1">
+            <a class="flex items-center py-3">
+              <hero-icon name="chart-bar" class="h-5 w-5 mr-2" />
+              <span>Reports</span>
             </a>
           </li>
           <li class="my-1">
@@ -53,11 +54,11 @@
           </li>
         </ul>
       </div>
-      <div class="flex-1">
+      <div class="flex-1 flex flex-col h-full">
     <!-- navbar -->
     <div class="navbar bg-primary ">
         <div class="flex-1">
-          <a class="btn btn-ghost text-xl text-white" href="/<%= page %>"><%= page %></a>
+          <a class="btn btn-ghost text-xl text-white" href="#"><%= page %></a>
         </div>
         <div class="flex-none">
           <ul class="menu menu-horizontal px-1 text-white">

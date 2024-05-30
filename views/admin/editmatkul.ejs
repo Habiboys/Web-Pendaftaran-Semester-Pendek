@@ -1,15 +1,13 @@
 <%- include('layout/header') %>
-  <h2 class="card-title">Form Tambah Mata Kuliah</h2>
-
-
-  <form method="post" action="/admin/tambah-matkul">
+  <h2 class="card-title">Edit Mata Kuliah</h2>
+  <form method="post" action="/admin/edit-matkul/<%= subject.id %>">
     <div class="form-control">
       <label class="label">
         <span class="label-text">Kode Mata Kuliah</span>
       </label>
-      <input type="text" placeholder="Kode Mata Kuliah" class="input input-bordered" name="id" />
+      <input type="text" placeholder="Kode Mata Kuliah" class="input input-bordered" name="id" value="<%= subject.id %>" />
       <% if (error) { %>
-        <% error.forEach(er=> { %>
+        <% error.forEach(er => { %>
           <% if (er.path === 'id') { %>
             <span class="text-red-500"><%= er.msg %></span>
           <% } %>
@@ -20,9 +18,9 @@
       <label class="label">
         <span class="label-text">Nama Mata Kuliah</span>
       </label>
-      <input type="text" placeholder="Nama Mata Kuliah" class="input input-bordered" name="name" />
+      <input type="text" placeholder="Nama Mata Kuliah" class="input input-bordered" name="name" value="<%= subject.name %>" />
       <% if (error) { %>
-        <% error.forEach(er=> { %>
+        <% error.forEach(er => { %>
           <% if (er.path === 'name') { %>
             <span class="text-red-500"><%= er.msg %></span>
           <% } %>
@@ -31,11 +29,11 @@
     </div>
     <div class="form-control">
       <label class="label">
-        <span class="label-text">SKS</span>
+        <span class="label-text">Kredit</span>
       </label>
-      <input type="number" placeholder="Jumlah SKS" class="input input-bordered" name="credit" />
+      <input type="number" placeholder="Jumlah Kredit" class="input input-bordered" name="credit" value="<%= subject.credit %>" />
       <% if (error) { %>
-        <% error.forEach(er=> { %>
+        <% error.forEach(er => { %>
           <% if (er.path === 'credit') { %>
             <span class="text-red-500"><%= er.msg %></span>
           <% } %>
@@ -46,9 +44,9 @@
       <label class="label">
         <span class="label-text">Semester</span>
       </label>
-      <input type="number" placeholder="Semester" class="input input-bordered" name="semester" />
+      <input type="number" placeholder="Semester" class="input input-bordered" name="semester" value="<%= subject.semester %>" />
       <% if (error) { %>
-        <% error.forEach(er=> { %>
+        <% error.forEach(er => { %>
           <% if (er.path === 'semester') { %>
             <span class="text-red-500"><%= er.msg %></span>
           <% } %>
@@ -62,11 +60,11 @@
       <select class="select select-bordered" name="lecturerId">
         <option disabled selected>Dosen Pengampu</option>
         <% lecturers.forEach(lecturer => { %>
-          <option value="<%= lecturer.nip %>"><%= lecturer.name %></option>
+          <option value="<%= lecturer.nip %>" <%= lecturer.id === subject.Lecturer.id ? 'selected' : '' %>><%= lecturer.name %></option>
         <% }) %>
       </select>
       <% if (error) { %>
-        <% error.forEach(er=> { %>
+        <% error.forEach(er => { %>
           <% if (er.path === 'lecturerId') { %>
             <span class="text-red-500"><%= er.msg %></span>
           <% } %>
@@ -77,9 +75,9 @@
       <label class="label">
         <span class="label-text">Kapasitas</span>
       </label>
-      <input type="number" placeholder="Kapasitas" class="input input-bordered" name="capacity" min="10"/>
+      <input type="number" placeholder="Kapasitas" class="input input-bordered" name="capacity" min="10" value="<%= subject.capacity %>"/>
       <% if (error) { %>
-        <% error.forEach(er=> { %>
+        <% error.forEach(er => { %>
           <% if (er.path === 'capacity') { %>
             <span class="text-red-500"><%= er.msg %></span>
           <% } %>
@@ -88,7 +86,7 @@
     </div>
   
     <div class="form-control mt-6">
-      <button type="submit" class="btn btn-primary">Tambah</button>
+      <button type="submit" class="btn btn-primary">Simpan</button>
     </div>
   </form>
 
