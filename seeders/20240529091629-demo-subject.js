@@ -11,6 +11,7 @@ module.exports = {
           name: "Subject 1",
           credit: 3,
           semester: 1,
+          capacity: 10,
           lecturerNip: "123456789",
           createdAt: new Date(),
           updatedAt: new Date(),
