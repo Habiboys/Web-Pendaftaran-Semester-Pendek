@@ -16,6 +16,7 @@ const view_form = async (req, res) => {
       title: "Ubah Password",
       error: req.cookies.error,
       success: req.cookies.success,
+      role: req.userRole,
     });
   } else if (role === "dosen") {
     return res.render("dosen/ubahpassword", {

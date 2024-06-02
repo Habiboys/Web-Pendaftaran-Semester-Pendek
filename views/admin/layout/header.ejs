@@ -11,33 +11,54 @@
     <div class="flex  h-full">
       <div class="bg-base-200 text-base-content p-4 pt-8 h-full overflow-y-auto">
         <h2 class="text-2xl font-bold mb-4 text-center"><a href="/admin/dashboard">Daftar SP</a></h2>
-        <ul class="menu p-0 w-64">
+        <ul class="menu p-0 w-56">
           <li
-            class="<% if (page == 'Dashboard') { %> <%= 'bg-primary text-primary-content rounded-lg my-1' %> <% } %>"
+            class="my-1 <% if (page == 'Dashboard') { %> <%= 'bg-primary text-primary-content rounded-lg my-1' %> <% } %>"
           >
             <a class="flex items-center py-3" href="/admin/dashboard">
               <hero-icon name="home" class="h-5 w-5 mr-2" />
               <span>Dashboard</span>
             </a>
           </li>
-          <li
-            class="<% if (page == 'Mata Kuliah' || page == 'Tambah Mata Kuliah' || page == 'Edit Mata Kuliah' ) { %> <%= 'bg-primary text-primary-content rounded-lg my-1' %> <% } %>"
-          >
-            <a class="flex items-center py-3" href="/admin/mata-kuliah">
-              <hero-icon name="user-group" class="h-5" />
-              <span>Mata Kuliah</span>
-            </a>
+          <li class="my-1 ">
+            <details <% if (page == 'Mata Kuliah' || page == 'Mata Kuliah Aktif' || page == 'Tambah Mata Kuliah' || page == 'Edit Mata Kuliah' ) { %> open <% } %>>
+              <summary class="cursor-pointer flex items-center py-3 <% if (page == 'Mata Kuliah' || page == 'Mata Kuliah Aktif' || page == 'Tambah Mata Kuliah' || page == 'Edit Mata Kuliah' ) { %> <%= 'bg-primary text-primary-content rounded-lg my-' %> <% } %>">
+                <hero-icon name="collection" class="" />
+                <span>Mata Kuliah</span>
+                <hero-icon name="chevron-down"  />
+              </summary>
+              <ul class="mt-4">
+                <li  class="my-1 <% if (page == 'Mata Kuliah' || page == 'Tambah Mata Kuliah' || page == 'Edit Mata Kuliah' ) { %> <%= 'text-primary  ' %> <% } %>">
+                  <a href="/admin/mata-kuliah">Daftar Mata Kuliah</a>
+                </li>
+                <li class="my-1 <% if (page == 'Mata Kuliah Aktif') { %> <%= 'text-primary  ' %> <% } %>">
+                  <a href="/admin/mata-kuliah-aktif">Mata Kuliah Aktif</a>
+                </li>
+              </ul>
+            </details>
           </li>
+          <li class="my-1 ">
+            <details >
+              <summary class="cursor-pointer flex items-center py-3 ">
+                <hero-icon name="collection" class="" />
+                <span>Mahasiswa</span>
+                <hero-icon name="chevron-down"  />
+              </summary>
+              <ul class="mt-4">
+                <li  class="my-1 ">
+                  <a href="/admin/mata-kuliah">Pendaftar</a>
+                </li>
+                <li class="my-1">
+                  <a href="/adminmatakuliah-aktif">Mahasiswa Aktif</a>
+                </li>
+              </ul>
+            </details>
+          </li>
+          
           <li class="my-1">
             <a class="flex items-center py-3">
-              <hero-icon name="collection" class="h-5 w-5 mr-2" />
-              <span>Products</span>
-            </a>
-          </li>
-          <li class="my-1">
-            <a class="flex items-center py-3">
-              <hero-icon name="shopping-cart" class="h-5 w-5 mr-2" />
-              <span>Orders</span>
+              <hero-icon name="collection" />
+              <span>Jadwal Kuliah</span>
             </a>
           </li>
           <li class="my-1">

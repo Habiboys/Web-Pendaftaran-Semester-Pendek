@@ -1,0 +1,22 @@
+<%- include('layout/header') %>
+<div class="container my-10 px-16 mt-12">
+  <h1 class="text-3xl font-bold mb-4">Mata Kuliah</h1>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <% matkul.forEach(subject => { %>
+      <div class="card bg-white shadow-lg">
+        <div class="card-body">
+          <img src="https://images.unsplash.com/photo-1714594847594-93392cb36c07?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="<%= subject.name %>" class="w-full h-32 object-cover mb-4">
+          <h2 class="card-title text-lg font-semibold mb-2"><%= subject.name %></h2>
+          <p class="text-sm text-gray-600">SKS: <%= subject.credit %></p>
+          <p class="text-sm text-gray-600">Semester:<%= subject.semester %></p>
+          <p class="text-sm text-gray-600">Kapasitas: 0/<%= subject.capacity %></p>
+          <div class="card-actions justify-end mt-4">
+            <button class="btn btn-primary">Daftar</button>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</div>
+
+<%- include('layout/footer') %>

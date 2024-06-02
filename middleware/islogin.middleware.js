@@ -5,7 +5,6 @@ function isLogin(req, res, next) {
   const token = req.cookies.token;
 
   if (!token) {
-    // Jika tidak ada token, lanjutkan ke middleware berikutnya
     return next();
   }
 

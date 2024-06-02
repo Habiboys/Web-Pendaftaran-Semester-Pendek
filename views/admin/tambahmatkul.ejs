@@ -33,7 +33,7 @@
       <label class="label">
         <span class="label-text">SKS</span>
       </label>
-      <input type="number" placeholder="Jumlah SKS" class="input input-bordered" name="credit" />
+      <input type="number" placeholder="Jumlah SKS" class="input input-bordered" name="credit" min="2" />
       <% if (error) { %>
         <% error.forEach(er=> { %>
           <% if (er.path === 'credit') { %>
@@ -46,7 +46,7 @@
       <label class="label">
         <span class="label-text">Semester</span>
       </label>
-      <input type="number" placeholder="Semester" class="input input-bordered" name="semester" />
+      <input type="number" placeholder="Semester" class="input input-bordered" name="semester" min="1" />
       <% if (error) { %>
         <% error.forEach(er=> { %>
           <% if (er.path === 'semester') { %>

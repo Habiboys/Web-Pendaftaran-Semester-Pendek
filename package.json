@@ -8,6 +8,7 @@
     "tail": "npx tailwindcss -i ./src/input.css -o ./public/stylesheets/output.css --watch"
   },
   "dependencies": {
+    "@iconify/iconify": "^3.1.1",
     "bcrypt": "^5.1.1",
     "connect": "^3.7.0",
     "connect-flash": "^0.1.1",

@@ -59,14 +59,14 @@ const storeMatkul = [
     .notEmpty()
     .withMessage("SKS harus diisi")
     .bail()
-    .isInt()
-    .withMessage("Kredit harus berupa angka"),
+    .isInt({ min: 2 })
+    .withMessage("Kredit harus berupa angka, minimal 2"),
   body("semester")
     .notEmpty()
     .withMessage("Semester harus diisi")
     .bail()
-    .isInt()
-    .withMessage("Semester harus berupa angka"),
+    .isInt({ min: 1 })
+    .withMessage("Semester harus berupa angka, minimal 1"),
   body("lecturerId").notEmpty().withMessage("Dosen harus dipilih"),
   body("capacity")
     .notEmpty()
@@ -142,15 +142,15 @@ const updateMatkul = [
     }),
   body("credit")
     .notEmpty()
-    .withMessage("Kredit harus diisi")
+    .withMessage("SKS harus diisi")
     .bail()
-    .isInt()
-    .withMessage("Kredit harus berupa angka"),
+    .isInt({ min: 2 })
+    .withMessage("SKS harus berupa angka"),
   body("semester")
     .notEmpty()
     .withMessage("Semester harus diisi")
     .bail()
-    .isInt()
+    .isInt({ min: 1 })
     .withMessage("Semester harus berupa angka"),
   body("lecturerId").notEmpty().withMessage("Dosen harus dipilih"),
   body("capacity")
@@ -192,17 +192,38 @@ const updateMatkul = [
 
 const deleteMatkul = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
-  try {
+ 
     const subject = await Subject.findByPk(id);
     await subject.destroy();
     let success = "Mata Kuliah Berhasil Di Hapus";
     res.cookie("success", success, { maxAge: 1000, httpOnly: true });
     res.redirect("/admin/mata-kuliah");
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Terjadi kesalahan saat menghapus data");
-  }
+  
+};
+
+const tutupMatkul = async (req,res)=>{
+  const { id } = req.params;
+  const subject = await Subject.findByPk(id);
+  subject.update({
+    status:'active'
+  });
+  let success = "Mata Kuliah Berhasil Di Tutup";
+    res.cookie("success", success, { maxAge: 1000, httpOnly: true });
+    res.redirect("/admin/mata-kuliah");
+
+};
+const matkulaktif = async (req, res) => {
+  const user = await User.findByPk(req.userId);
+  const matkul = await Subject.findAll({
+    where:{
+      status: 'active',
+    },
+     include: Lecturer });
+  res.render("admin/matkulaktif", {
+    user,
+    page: "Mata Kuliah Aktif",
+    matkul,
+  });
 };
 
 module.exports = {
@@ -214,4 +235,6 @@ module.exports = {
   updateMatkul,
   editMatkul,
   deleteMatkul,
+  matkulaktif,
+  tutupMatkul
 };

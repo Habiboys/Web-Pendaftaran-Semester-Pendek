@@ -14,6 +14,8 @@ router.post('/tambah-matkul', verifyUser('admin') , controller.storeMatkul);
 router.get('/edit-matkul/:id',  verifyUser('admin') ,controller.editMatkul);
 router.post('/edit-matkul/:id', verifyUser('admin') , controller.updateMatkul);
 router.post('/delete-matkul/:id', verifyUser('admin') , controller.deleteMatkul);
+router.post('/close-matkul/:id', verifyUser('admin') , controller.tutupMatkul);
+router.get('/mata-kuliah-aktif', verifyUser('admin') , controller.matkulaktif); 
 
 router.get('/profile',  verifyUser('admin'), controller.view_profile);
 router.get('/profile/ubah-password',  verifyUser('admin'), ubahpassword.view_form);

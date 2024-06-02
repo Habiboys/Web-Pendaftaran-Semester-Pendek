@@ -8,39 +8,61 @@
       <a class="btn btn-ghost text-xl text-white" href="/home">Daftar Sp</a>
     </div>
     <div class="flex-none mr-8" >
-      <ul class="menu menu-horizontal px-1 text-white">
-        <li><a href="/home">Home</a></li>
-        <li><a>Daftar</a></li>
-        <li><a>Informasi</a></li>
+      <ul class="menu menu-horizontal px-1 text-white mr-1">
+        <li><a href="/home" 
+          <% if(title === 'Home') {%>
+            class="text-warning"
+          <% } %>
+         >Home</a></li>
+        <li><a href="/mata-kuliah"
+          <% if(title === 'Daftar Mata Kuliah') {%>
+            class="text-warning"
+          <% } %>
+          
+          >Daftar</a></li>
+        <li><a href="#" 
+          <% if(title === 'Informasi') {%>
+            class="text-warning"
+          <% } %>
+          >Informasi</a></li>
+        <% if (role!=="mahasiswa"){ %>
+
+          <li> <a href="auth/login">Login</a></li>
+          <% } %>
+       
+      <% if (role==="mahasiswa"){ %>
+        
+        <li > <a href="" class="text-xl">  <span class="iconify mx-1"data-icon="mdi:bell" data-inline="false"></span></a></li>
       </ul>
-      <div class="dropdown dropdown-end">
-        <div
-          tabindex="0"
-          role="button"
-          class="btn btn-ghost btn-circle avatar"
-        >
-          <div class="w-10 rounded-full ">
-            <img
-              alt="img"
-              src="/images/student2.png"
-            />
+        <div class="dropdown dropdown-end">
+          <div
+            tabindex="0"
+            role="button"
+            class="btn btn-ghost btn-circle avatar"
+          >
+            <div class="w-10 rounded-full ">
+              <img
+                alt="img"
+                src="/images/student2.png"
+              />
+            </div>
           </div>
+          <ul
+            tabindex="0"
+            class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+          >
+            <li>
+              <a class="justify-between" href="/profile"> Profile </a>
+            </li>
+            <li><a>Settings</a></li>
+            <li>
+                <form method="POST" action="/auth/logout">
+                    <button type="submit">logout</button>
+                  </form>
+            </li>
+          </ul>
         </div>
-        <ul
-          tabindex="0"
-          class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
-        >
-          <li>
-            <a class="justify-between" href="/profile"> Profile </a>
-          </li>
-          <li><a>Settings</a></li>
-          <li>
-              <form method="POST" action="/auth/logout">
-                  <button type="submit">logout</button>
-                </form>
-          </li>
-        </ul>
-      </div>
+      <% } %>
     </div>
   </div>
 </div>

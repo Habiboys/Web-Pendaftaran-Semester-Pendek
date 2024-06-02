@@ -1,14 +1,14 @@
 <%- include('layout/header') %>
 <!-- Konten utama di sini -->
-<h1 class="text-2xl font-bold mb-4 mt-6"><%= page %></h1>
-<% if (success) { %>
-  <div class="bg-green-500 text-white p-3 rounded ">
-    <p><%= success %></p>
-  </div>
-<% } %>
-<div class="flex  justify-between mb-4 mt-4">
-  <a href="/admin/tambah-matkul" class="btn btn-primary ">Tambah Mata Kuliah</a>
+<div class="flex justify-between  mt-4">
+  <h1 class="text-2xl font-bold mb-4 mt-2"><%= page %></h1>
+  <a href="/admin/tambah-matkul" class="btn btn-sm btn-primary mt-4"> + Tambah</a>
 </div>
+<% if (success) { %>
+<div class="bg-green-500 text-white p-3 rounded mb-4">
+  <p><%= success %></p>
+</div>
+<% } %>
 
 <div class="overflow-x-auto">
   <table class="table w-full">
@@ -35,20 +35,18 @@
         <td>0/<%= subject.capacity %></td>
         <td><%= subject.status %></td>
         <td>
-          <div class="flex ">
-            <form action="" method="post">
-              <button type="submit" class="btn btn-sm btn-primary mr-2">
+          <div class="flex justify-between">
+            <div>
+              <label for="close-modal-<%= subject.id %>" class="btn btn-sm btn-primary mr-2 modal-button" <% if (subject.status=='active'){ %>disabled <% } %>>
                 Tutup
-              </button>
-            </form>
-            <a
-              href="/admin/edit-matkul/<%= subject.id %>"
-              class="btn  btn-sm btn-warning mr-2"
-              >Edit</a
-            >
-            <form action="/admin/delete-matkul/<%= subject.id %>" method="post">
-              <button type="submit" class="btn btn-sm btn-error">Hapus</button>
-            </form>
+              </label>
+            </div>
+            <div>
+              <a href="/admin/edit-matkul/<%= subject.id %>" class="btn btn-sm btn-warning mr-2">Edit</a>
+            </div>
+            <div>
+              <label for="delete-modal-<%= subject.id %>" class="btn btn-sm btn-error modal-button">Hapus</label>
+            </div>
           </div>
         </td>
       </tr>
@@ -56,4 +54,38 @@
     </tbody>
   </table>
 </div>
+
+<% matkul.forEach(subject => { %>
+<input type="checkbox" id="delete-modal-<%= subject.id %>" class="modal-toggle" />
+<div class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Konfirmasi Penghapusan</h3>
+    <p>Apakah Anda yakin ingin menghapus mata kuliah <%= subject.name %>?</p>
+    <div class="modal-action">
+      <form action="/admin/delete-matkul/<%= subject.id %>" method="post">
+        <button type="submit" class="btn btn-error">Ya, Hapus</button>
+      </form>
+      <label for="delete-modal-<%= subject.id %>" class="btn">Batal</label>
+    </div>
+  </div>
+</div>
+<% }) %>
+
+<!-- Modal untuk menutup mata kuliah -->
+<% matkul.forEach(subject => { %>
+<input type="checkbox" id="close-modal-<%= subject.id %>" class="modal-toggle" />
+<div class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Konfirmasi Penutupan Mata Kuliah</h3>
+    <p>Apakah Anda yakin ingin menutup mata kuliah <%= subject.name %>?</p>
+    <div class="modal-action">
+      <form action="/admin/close-matkul/<%= subject.id %>" method="post">
+        <button type="submit" class="btn btn-primary">Ya, Tutup</button>
+      </form>
+      <label for="close-modal-<%= subject.id %>" class="btn">Batal</label>
+    </div>
+  </div>
+</div>
+<% }) %>
+
 <%- include('layout/footer') %>

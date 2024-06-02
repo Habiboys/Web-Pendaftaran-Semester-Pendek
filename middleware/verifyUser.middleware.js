@@ -42,9 +42,11 @@ function verifyUser(role) {
               req.userEmail = user.email;
               return next();
             } catch (refreshErr) {
+              res.clearCookie('token');
               return res.redirect("/auth/login");
             }
           } else {
+            res.clearCookie('token');
             return res.redirect("/auth/login");
           }
         } else {

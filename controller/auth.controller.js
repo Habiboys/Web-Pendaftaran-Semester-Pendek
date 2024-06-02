@@ -51,7 +51,7 @@ const checklogin = [
     const refreshToken = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
       process.env.JWT_SECRET_REFRESH_TOKEN,
-      { expiresIn: '4h' }
+      { expiresIn: '1d' }
     );
 
     user.refreshToken = refreshToken;
