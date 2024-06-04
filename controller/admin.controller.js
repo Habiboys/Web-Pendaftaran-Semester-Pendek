@@ -236,6 +236,47 @@ const matkulaktif = async (req, res) => {
 };
 
 
+const pendaftar = async (req, res) => {
+  const user = await User.findByPk(req.userId);
+  let mhs = await Registration.findAll({
+    include: [Subject, Student]
+  });
+
+  // Iterasi melalui mhs dan memformat setiap tanggal
+  mhs = mhs.map(item => {
+    return {
+      ...item,
+      date: moment(item.date).format('DD/MM/YYYY')
+    };
+  });
+
+  res.render("admin/Pendaftar", {
+    user,
+    page: "Pendaftar",
+    mhs,
+    success: req.cookies.success,
+  });
+};
+
+
+
+const tolakPendaftar= async (req,res)=>{
+  const {studentNim, subjectId}= req.params;
+  const mhs = await Registration.findOne({
+    where: {
+      studentNim: studentNim,
+      subjectId: subjectId
+    }
+  });
+  await mhs.destroy();
+  
+  res.cookie("success", "Pendaftar Berhasil di tolak", { maxAge: 1000, httpOnly: true });
+  res.redirect("/admin/pendaftar");
+
+}
+
+
+
 module.exports = {
   view_profile,
   dashboard,
@@ -247,5 +288,10 @@ module.exports = {
   deleteMatkul,
   matkulaktif,
   tutupMatkul,
+
+  pendaftar,
+  tolakPendaftar,
+
+
 
 };
