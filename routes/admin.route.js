@@ -20,6 +20,7 @@ router.get('/pendaftar', verifyUser('admin') , controller.pendaftar);
 router.post('/pendaftar/tolak/:studentNim/:subjectId', verifyUser('admin') , controller.tolakPendaftar); 
 // router.get('/mahasiswa-aktif', verifyUser('admin') , controller.matkulaktif); 
 
+
 router.get('/profile',  verifyUser('admin'), controller.view_profile);
 router.get('/profile/ubah-password',  verifyUser('admin'), ubahpassword.view_form);
 router.post('/profile/ubah-password',  verifyUser('admin'), ubahpassword.changePassword);

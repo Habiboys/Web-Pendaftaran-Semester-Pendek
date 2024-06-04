@@ -235,6 +235,7 @@ const matkulaktif = async (req, res) => {
   });
 };
 
+
 const pendaftar = async (req, res) => {
   const user = await User.findByPk(req.userId);
   let mhs = await Registration.findAll({
@@ -273,6 +274,9 @@ const tolakPendaftar= async (req,res)=>{
   res.redirect("/admin/pendaftar");
 
 }
+
+
+
 module.exports = {
   view_profile,
   dashboard,
@@ -284,6 +288,10 @@ module.exports = {
   deleteMatkul,
   matkulaktif,
   tutupMatkul,
+
   pendaftar,
   tolakPendaftar,
+
+
+
 };
