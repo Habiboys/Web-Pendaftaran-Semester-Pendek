@@ -32,7 +32,7 @@
         <td><%= subject.credit %></td>
         <td><%= subject.semester %></td>
         <td><%= subject.Lecturer.name %></td>
-        <td>0/<%= subject.capacity %></td>
+        <td><%= subject.dataValues.jumlahPendaftar %>/<%= subject.capacity %></td>
         <td><%= subject.status %></td>
         <td>
           <div class="flex justify-between">

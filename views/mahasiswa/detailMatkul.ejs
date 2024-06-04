@@ -1,0 +1,51 @@
+<%- include('layout/header') %>
+<div class="container my-10 px-16 mt-12">
+  <h1 class="text-3xl font-bold mb-4 text-center"><%= matkul.name %></h1>
+
+  <div>
+    <h2 class="text-lg font-semibold mb-2"><%= matkul.name %></h2>
+    <p class="text-sm text-gray-600">SKS: <%= matkul.credit %></p>
+    <p class="text-sm text-gray-600">Semester: <%= matkul.semester %></p>
+    <p class="text-sm text-gray-600">Kapasitas: 0/<%= matkul.capacity %></p>
+    <p class="mt-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga, animi! Nemo ab dolores tempora culpa?
+      Iste repellat ratione porro odio esse explicabo, sit, cum obcaecati fugiat doloribus, temporibus iusto eius! Lorem
+      ipsum dolor sit amet consectetur adipisicing elit. Rerum vel ipsum, recusandae ducimus possimus dignissimos quas
+      corporis beatae quos accusantium ea molestias totam unde cum voluptate adipisci. Explicabo, suscipit! Nesciunt.
+    </p>
+
+    <% if(!hasRegis && matkul.status==='active') { %>
+      <div class="bg-red-500 text-white p-3 rounded mt-12 text-center">
+        <p>Pendaftaran Sudah Ditutup</p>
+      </div>
+    <% } else if(!hasRegis) { %>
+      <!-- Tombol untuk membuka modal -->
+      <div class="mt-16 ">
+      <% if (error){ %>
+        <p class="text-center text-error mb-2">Anda telah pencapai batas SKS</p>
+          <% } %>
+      <label for="konfirmasi-modal" class="btn btn-primary w-full  modal-button">Daftar</label>
+    </div>
+      <!-- Modal Konfirmasi Pendaftaran -->
+      <input type="checkbox" id="konfirmasi-modal" class="modal-toggle" />
+      <div class="modal">
+        <div class="modal-box">
+          <h3 class="font-bold text-lg">Konfirmasi Pendaftaran</h3>
+          <p class="py-4">Apakah Anda yakin ingin mendaftar mata kuliah <%= matkul.name %>?</p>
+          <div class="modal-action">
+            <form action="/mata-kuliah/daftar/<%= matkul.id %>" method="post">
+              <button type="submit" class="btn btn-primary">Ya</button>
+            </form>
+            <label for="konfirmasi-modal" class="btn btn-base-100">Batal</label>
+          </div>
+        </div>
+      </div>
+    <% } else { %>
+      <div class="bg-green-500 text-white p-3 rounded mt-12 text-center">
+        <p>Anda Telah Mendaftar Matakuliah Ini Mohon Tunggu Pemberitahuan Selanjutnya</p>
+      </div>
+    <% } %>
+  </div>
+
+</div>
+
+<%- include('layout/footer') %>
