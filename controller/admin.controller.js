@@ -1,4 +1,5 @@
 const { User, Lecturer, Subject, Registration, Student,  Schedule } = require("../models/index");
+
 const { body, validationResult } = require("express-validator");
 const moment = require("moment");
 
@@ -16,6 +17,7 @@ const matkul = async (req, res) => {
   const user = await User.findByPk(req.userId);
   const matkul = await Subject.findAll({ include: Lecturer });
   
+
   for (const m of matkul) {
     const jumlahPendaftar = await Registration.count({ where: { subjectId: m.id } });
     m.dataValues.jumlahPendaftar = jumlahPendaftar;
@@ -235,6 +237,7 @@ const matkulaktif = async (req, res) => {
   });
 };
 
+
 const pendaftar = async (req, res) => {
   const user = await User.findByPk(req.userId);
   let mhs = await Registration.findAll({
@@ -274,6 +277,7 @@ const tolakPendaftar= async (req,res)=>{
 
 }
 
+
 const jadwal = async (req,res)=>{
   const {id}= req.params;
   const jadwal = await Schedule.findAll({
@@ -292,6 +296,7 @@ const jadwal = async (req,res)=>{
     success: req.cookies.success,
   });
 }
+
 module.exports = {
   view_profile,
   dashboard,
@@ -303,7 +308,11 @@ module.exports = {
   deleteMatkul,
   matkulaktif,
   tutupMatkul,
+
   pendaftar,
   tolakPendaftar,
   jadwal
+
+
+
 };
