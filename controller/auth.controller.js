@@ -83,7 +83,7 @@ function getRedirectUrl(role) {
 const logout = async (req, res) => {
   res.clearCookie("token");
   res.clearCookie("refreshToken");
-  res.redirect("/auth/login");
+  res.redirect("/");
 };
 
 module.exports = {

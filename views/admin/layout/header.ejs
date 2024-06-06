@@ -22,7 +22,7 @@
           </li>
           <li class="my-1 ">
             <details <% if (page == 'Mata Kuliah' || page == 'Mata Kuliah Aktif' || page == 'Tambah Mata Kuliah' || page == 'Edit Mata Kuliah' ) { %> open <% } %>>
-              <summary class="cursor-pointer flex items-center py-3 <% if (page == 'Mata Kuliah' || page == 'Mata Kuliah Aktif' || page == 'Tambah Mata Kuliah' || page == 'Edit Mata Kuliah' ) { %> <%= 'bg-primary text-primary-content rounded-lg my-' %> <% } %>">
+              <summary class="py-3 <% if (page == 'Mata Kuliah' || page == 'Mata Kuliah Aktif' || page == 'Tambah Mata Kuliah' || page == 'Edit Mata Kuliah' ) { %> bg-primary text-primary-content rounded-lg my-1 <% } %>">
                 <hero-icon name="collection" class="" />
                 <span>Mata Kuliah</span>
                 <hero-icon name="chevron-down"  />
@@ -38,18 +38,18 @@
             </details>
           </li>
           <li class="my-1 ">
-            <details >
-              <summary class="cursor-pointer flex items-center py-3 ">
+            <details <% if (page == 'Pendaftar' || page == 'Mahasiswa Aktif'  ) { %> open <% } %> >
+              <summary class="py-3 <% if (page == 'Pendaftar' || page == 'Mahasiswa Aktif'  ) { %> bg-primary text-primary-content rounded-lg my-1 <% } %> ">
                 <hero-icon name="collection" class="" />
                 <span>Mahasiswa</span>
                 <hero-icon name="chevron-down"  />
               </summary>
               <ul class="mt-4">
-                <li  class="my-1 ">
-                  <a href="/admin/mata-kuliah">Pendaftar</a>
+                <li  class="my-1 <% if (page == 'Pendaftar') { %> text-primary <% } %>">
+                  <a href="/admin/pendaftar">Pendaftar</a>
                 </li>
-                <li class="my-1">
-                  <a href="/adminmatakuliah-aktif">Mahasiswa Aktif</a>
+                <li class="my-1 <% if (page == 'Mahasiswa Aktif') { %> text-primary <% } %>">
+                  <a href="/admin/mahasiswa-aktif">Mahasiswa Aktif</a>
                 </li>
               </ul>
             </details>

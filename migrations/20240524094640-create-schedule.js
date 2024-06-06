@@ -11,24 +11,35 @@ module.exports = {
       },
       subjectId: {
         type: Sequelize.STRING,
+        allowNull: false,
         references: {
           model: "Subjects",
           key: "id",
         },
       },
       date: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+      day:{
+        type: Sequelize.ENUM,
+        allowNull: false,
+        values: ["senin", "selasa", "rabu", "kamis", "jumat"],
       },
       timeStart: {
+        allowNull: false,
         type: Sequelize.TIME
       },
       timeEnd: {
+        allowNull: false,
         type: Sequelize.TIME
       },
       building: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       room: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       createdAt: {

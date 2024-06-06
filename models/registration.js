@@ -11,8 +11,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Registration.init({
-    subjectId: DataTypes.STRING,
-    studentNim: DataTypes.STRING,
+    subjectId: {
+      type: DataTypes.STRING,
+      primaryKey: true,
+    },
+    studentNim: {
+      type: DataTypes.STRING,
+      primaryKey: true,
+    },
     date: DataTypes.DATE,
     paymentProof: DataTypes.STRING,
     status:{

@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
   Schedule.init({
     subjectId: DataTypes.STRING,
     date: DataTypes.DATE,
+    day:{
+      type: DataTypes.ENUM,
+        values: ["senin", "selasa", "rabu", "kamis", "jumat"],
+    },
     timeStart: DataTypes.TIME,
     timeEnd: DataTypes.TIME,
     building: DataTypes.STRING,

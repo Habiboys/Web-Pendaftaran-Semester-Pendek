@@ -63,7 +63,9 @@ app.use('/dosen', dosenRouter);
 //   res.locals.success = req.flash('succes');
 //   next();
 // });
-
+app.get('*', (req, res) => {
+  res.status(404).render('notfound');
+});
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

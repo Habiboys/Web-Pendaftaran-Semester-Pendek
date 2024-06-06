@@ -1,5 +1,6 @@
-const { User, Lecturer, Subject } = require("../models/index");
+const { User, Lecturer, Subject, Registration, Student,  Schedule } = require("../models/index");
 const { body, validationResult } = require("express-validator");
+const moment = require("moment");
 
 const view_profile = async (req, res) => {
   const user = await User.findByPk(req.userId);
@@ -14,6 +15,13 @@ const dashboard = async (req, res) => {
 const matkul = async (req, res) => {
   const user = await User.findByPk(req.userId);
   const matkul = await Subject.findAll({ include: Lecturer });
+  
+  for (const m of matkul) {
+    const jumlahPendaftar = await Registration.count({ where: { subjectId: m.id } });
+    m.dataValues.jumlahPendaftar = jumlahPendaftar;
+  }
+
+
   res.render("admin/matkul", {
     user,
     page: "Mata Kuliah",
@@ -21,6 +29,7 @@ const matkul = async (req, res) => {
     success: req.cookies.success,
   });
 };
+
 
 const tambahMatkul = async (req, res) => {
   console.log(req.userId);
@@ -226,6 +235,63 @@ const matkulaktif = async (req, res) => {
   });
 };
 
+const pendaftar = async (req, res) => {
+  const user = await User.findByPk(req.userId);
+  let mhs = await Registration.findAll({
+    include: [Subject, Student]
+  });
+
+  // Iterasi melalui mhs dan memformat setiap tanggal
+  mhs = mhs.map(item => {
+    return {
+      ...item,
+      date: moment(item.date).format('DD/MM/YYYY')
+    };
+  });
+
+  res.render("admin/Pendaftar", {
+    user,
+    page: "Pendaftar",
+    mhs,
+    success: req.cookies.success,
+  });
+};
+
+
+
+const tolakPendaftar= async (req,res)=>{
+  const {studentNim, subjectId}= req.params;
+  const mhs = await Registration.findOne({
+    where: {
+      studentNim: studentNim,
+      subjectId: subjectId
+    }
+  });
+  await mhs.destroy();
+  
+  res.cookie("success", "Pendaftar Berhasil di tolak", { maxAge: 1000, httpOnly: true });
+  res.redirect("/admin/pendaftar");
+
+}
+
+const jadwal = async (req,res)=>{
+  const {id}= req.params;
+  const jadwal = await Schedule.findAll({
+  where:{
+  subjectId:id,
+  }
+  });
+  console.log(id)
+  const matkul= await Subject.findByPk(id);
+  const user = await User.findByPk(req.userId);
+  res.render("admin/jadwal", {
+    user,
+    page: `Jadwal Kuliah ${matkul.name}`  ,
+    matkul,
+    jadwal,
+    success: req.cookies.success,
+  });
+}
 module.exports = {
   view_profile,
   dashboard,
@@ -236,5 +302,8 @@ module.exports = {
   editMatkul,
   deleteMatkul,
   matkulaktif,
-  tutupMatkul
+  tutupMatkul,
+  pendaftar,
+  tolakPendaftar,
+  jadwal
 };
