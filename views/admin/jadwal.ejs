@@ -1,0 +1,78 @@
+<%- include('layout/header') %>
+<div class="flex justify-between mt-4">
+  <h1 class="text-2xl font-bold mb-4 mt-2"><%= page %></h1>
+  <a href="/admin/tambah-jadwal" class="btn btn-sm btn-primary mt-4">
+    + Tambah</a
+  >
+</div>
+<% if (success) { %>
+<div class="bg-green-500 text-white p-3 rounded mb-4">
+  <p><%= success %></p>
+</div>
+<% } %>
+
+<div class="overflow-x-auto">
+  <table class="table w-full">
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Tanggal</th>
+        <th>Hari</th>
+        <th>Pukul</th>
+        <th>Gedung</th>
+        <th>Ruangan</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% let no = 1; %> <% jadwal.forEach(schedule => { %>
+      <tr>
+        <td><%= no %></td>
+        <td><%= schedule.date.toLocaleDateString() %></td>
+        <td><%= schedule.day %></td>
+        <td><%= schedule.timeStart %> s/d <%= schedule.timeEnd %></td>
+        <td><%= schedule.building %></td>
+        <td><%= schedule.room %></td>
+        <td>
+          <div class="flex">
+            <div>
+              <a
+                href="/admin/edit-jadwal/<%= schedule.id %>"
+                class="btn btn-sm btn-warning mr-2"
+                >Edit</a
+              >
+            </div>
+            <div>
+              <label
+                for="delete-modal-<%= schedule.id %>"
+                class="btn btn-sm btn-error modal-button"
+                >Hapus</label
+              >
+            </div>
+          </div>
+        </td>
+      </tr>
+      <% no++; %> <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<% jadwal.forEach(schedule => { %>
+<input
+  type="checkbox"
+  id="delete-modal-<%= schedule.id %>"
+  class="modal-toggle"
+/>
+<div class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Konfirmasi Penghapusan</h3>
+    <p>Apakah Anda yakin ingin menghapus jadwal ini?</p>
+    <div class="modal-action">
+      <form action="/admin/delete-jadwal/<%= schedule.id %>" method="post">
+        <button type="submit" class="btn btn-error">Ya, Hapus</button>
+      </form>
+      <label for="delete-modal-<%= schedule.id %>" class="btn">Batal</label>
+    </div>
+  </div>
+</div>
+<% }) %> <%- include('layout/footer') %>

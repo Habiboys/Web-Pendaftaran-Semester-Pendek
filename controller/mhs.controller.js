@@ -80,6 +80,12 @@ const view_profile = async (req, res) => {
 const view_matkul = async (req, res) => {
   await cekLogin(req, res, async () => {
     const matkul = await Subject.findAll();
+
+    for (const m of matkul) {
+      const jumlahPendaftar = await Registration.count({ where: { subjectId: m.id } });
+      m.dataValues.jumlahPendaftar = jumlahPendaftar;
+    }
+
     res.render("mahasiswa/matkul", {
       title: "Daftar Mata Kuliah",
       role: req.userRole,
@@ -145,7 +151,9 @@ const prosesDaftar = async (req, res) => {
   });
 
   const totalSKSToRegister = totalSKS + subject.credit;
-  if (totalSKSToRegister > 3) {
+
+  if (totalSKSToRegister > 9) {
+
     res.cookie("error", "Anda Telah Mencapai Batas maksimum sks", {
       maxAge: 1000,
       httpOnly: true,

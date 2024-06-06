@@ -16,6 +16,8 @@ router.post('/edit-matkul/:id', verifyUser('admin') , controller.updateMatkul);
 router.post('/delete-matkul/:id', verifyUser('admin') , controller.deleteMatkul);
 router.post('/close-matkul/:id', verifyUser('admin') , controller.tutupMatkul);
 router.get('/mata-kuliah-aktif', verifyUser('admin') , controller.matkulaktif); 
+
+router.get('/mata-kuliah-aktif/jadwal/:id', verifyUser('admin') , controller.jadwal); 
 router.get('/pendaftar', verifyUser('admin') , controller.pendaftar); 
 router.post('/pendaftar/tolak/:studentNim/:subjectId', verifyUser('admin') , controller.tolakPendaftar); 
 // router.get('/mahasiswa-aktif', verifyUser('admin') , controller.matkulaktif); 

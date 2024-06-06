@@ -1,4 +1,5 @@
-const { User, Lecturer, Subject, Registration, Student } = require("../models/index");
+const { User, Lecturer, Subject, Registration, Student,  Schedule } = require("../models/index");
+
 const { body, validationResult } = require("express-validator");
 const moment = require("moment");
 
@@ -16,11 +17,12 @@ const matkul = async (req, res) => {
   const user = await User.findByPk(req.userId);
   const matkul = await Subject.findAll({ include: Lecturer });
   
-  // Hitung jumlah pendaftar untuk setiap mata kuliah
+
   for (const m of matkul) {
     const jumlahPendaftar = await Registration.count({ where: { subjectId: m.id } });
     m.dataValues.jumlahPendaftar = jumlahPendaftar;
   }
+
 
   res.render("admin/matkul", {
     user,
@@ -276,6 +278,24 @@ const tolakPendaftar= async (req,res)=>{
 }
 
 
+const jadwal = async (req,res)=>{
+  const {id}= req.params;
+  const jadwal = await Schedule.findAll({
+  where:{
+  subjectId:id,
+  }
+  });
+  console.log(id)
+  const matkul= await Subject.findByPk(id);
+  const user = await User.findByPk(req.userId);
+  res.render("admin/jadwal", {
+    user,
+    page: `Jadwal Kuliah ${matkul.name}`  ,
+    matkul,
+    jadwal,
+    success: req.cookies.success,
+  });
+}
 
 module.exports = {
   view_profile,
@@ -291,6 +311,7 @@ module.exports = {
 
   pendaftar,
   tolakPendaftar,
+  jadwal
 
 
 
