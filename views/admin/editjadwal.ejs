@@ -1,0 +1,60 @@
+<%- include('layout/header') %>
+<div class="mt-4">
+  <h1 class="text-2xl font-bold mb-4"><%= page %></h1>
+</div>
+<% if (konflik) { %>
+  <div class="alert alert-error shadow-lg mb-4">
+    <div>
+      <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span><%= konflik %></span>
+    </div>
+  </div>
+<% } %>
+
+<form action="/admin/mata-kuliah-aktif/jadwal/edit-jadwal/<%= jadwal.subjectId %>/<%= jadwal.id %>" method="POST" id="jadwalForm">
+  <div class="form-control w-full">
+    <label class="label" for="day">
+      <span class="label-text">Hari</span>
+    </label>
+    <select id="day" name="day" class="select select-bordered">
+      <option value="senin" <% if (jadwal.day === 'senin') { %> selected <% } %>>Senin</option>
+      <option value="selasa" <% if (jadwal.day === 'selasa') { %> selected <% } %>>Selasa</option>
+      <option value="rabu" <% if (jadwal.day === 'rabu') { %> selected <% } %>>Rabu</option>
+      <option value="kamis" <% if (jadwal.day === 'kamis') { %> selected <% } %>>Kamis</option>
+      <option value="jumat" <% if (jadwal.day === 'jumat') { %> selected <% } %>>Jumat</option>
+    </select>
+  </div>
+
+  <div class="form-control w-full">
+    <label class="label" for="timeStart">
+      <span class="label-text">Waktu Mulai</span>
+    </label>
+    <input type="time" id="timeStart" name="timeStart" class="input input-bordered w-full" value="<%= jadwal.timeStart %>"/>
+  </div>
+
+  <div class="form-control w-full">
+    <label class="label" for="timeEnd">
+      <span class="label-text">Waktu Selesai</span>
+    </label>
+    <input type="time" id="timeEnd" name="timeEnd" class="input input-bordered w-full" value="<%= jadwal.timeEnd %>"/>
+  </div>
+
+  <div class="form-control w-full">
+    <label class="label" for="building">
+      <span class="label-text">Gedung</span>
+    </label>
+    <input type="text" id="building" name="building" class="input input-bordered w-full" value="<%= jadwal.building %>"/>
+  </div>
+
+  <div class="form-control w-full">
+    <label class="label" for="room">
+      <span class="label-text">Ruangan</span>
+    </label>
+    <input type="text" id="room" name="room" class="input input-bordered w-full" value="<%= jadwal.room %>"/>
+  </div>
+
+  <button type="submit" class="btn btn-primary mt-4">Simpan</button>
+</form>
+<%- include('layout/footer') %>

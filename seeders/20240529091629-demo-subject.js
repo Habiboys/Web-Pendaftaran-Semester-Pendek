@@ -8,7 +8,7 @@ module.exports = {
       [
         {
           id: 'JSI001',
-          name: "Subject 1",
+          name: "PBO",
           credit: 3,
           semester: 1,
           capacity: 10,
@@ -19,7 +19,7 @@ module.exports = {
         },
         {
           id: 'JSI002',
-          name: "Subject 2",
+          name: "PWEB",
           credit: 3,
           semester: 1,
           capacity: 10,

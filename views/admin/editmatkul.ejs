@@ -1,18 +1,17 @@
 <%- include('layout/header') %>
   <h2 class="card-title">Edit Mata Kuliah</h2>
+  <% if (maxsks) { %>
+    <div class="bg-red-500 text-white p-3 rounded mb-4 mt-4">
+      <p><%= maxsks %></p>
+    </div>
+    <% } %>
   <form method="post" action="/admin/edit-matkul/<%= subject.id %>">
     <div class="form-control">
       <label class="label">
         <span class="label-text">Kode Mata Kuliah</span>
       </label>
-      <input type="text" placeholder="Kode Mata Kuliah" class="input input-bordered" name="id" value="<%= subject.id %>" />
-      <% if (error) { %>
-        <% error.forEach(er => { %>
-          <% if (er.path === 'id') { %>
-            <span class="text-red-500"><%= er.msg %></span>
-          <% } %>
-        <% }); %>
-      <% } %>
+      <input type="text" placeholder="Kode Mata Kuliah" class="input input-bordered" name="id" value="<%= subject.id %>" readonly/>
+    
     </div>
     <div class="form-control">
       <label class="label">

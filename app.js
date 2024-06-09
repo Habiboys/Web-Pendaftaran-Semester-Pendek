@@ -11,8 +11,7 @@ require('dotenv').config()
 
 
 
-// var indexRouter = require('./routes/index');
-// var usersRouter = require('./routes/users');
+
 var mhsRouter = require('./routes/mahasiswa.route');
 var adminRouter = require('./routes/admin.route');
 var dosenRouter = require('./routes/dosen.route');
@@ -23,14 +22,7 @@ var authRouter = require('./routes/auth.route');
 var app = express();
 app.use(flash());
 
-// app.use(publicRoutes);
 
-// app.use(session({
-//   secret: 'your_secret_key',
-//   resave: false,
-//   saveUninitialized: true,
-//   cookie: { secure: false } // Sesuaikan dengan konfigurasi keamanan Anda
-// }));
 
 
 
@@ -44,12 +36,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-// app.use(flash());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-
-
-// app.use('/', indexRouter);
-// app.use('/users', usersRouter);
 app.use('/', mhsRouter);
 app.use('/auth', authRouter);
 app.use('/admin', adminRouter);
@@ -57,12 +45,7 @@ app.use('/dosen', dosenRouter);
 
 
 
-//pesan
-// app.use((req,res,next)=>{
-//   res.locals.error = req.flash('error');
-//   res.locals.success = req.flash('succes');
-//   next();
-// });
+
 app.get('*', (req, res) => {
   res.status(404).render('notfound');
 });

@@ -10,8 +10,9 @@ module.exports = {
         allowNull: false,
         references: {
           model: "Subjects",
-          key: "id",
+          key: "id", 
         },
+        onDelete: 'CASCADE'
       },
       studentNim: {
         type: Sequelize.STRING,
@@ -21,6 +22,7 @@ module.exports = {
           model: "Students",
           key: "nim",
         },
+        onDelete: 'CASCADE'
       },
       date: {
         type: Sequelize.DATE,

@@ -12,14 +12,11 @@ module.exports = {
       subjectId: {
         type: Sequelize.STRING,
         allowNull: false,
+        onDelete: 'CASCADE' ,
         references: {
           model: "Subjects",
           key: "id",
         },
-      },
-      date: {
-        type: Sequelize.DATE,
-        allowNull: false,
       },
       day:{
         type: Sequelize.ENUM,

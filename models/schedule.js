@@ -10,12 +10,11 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Schedule.belongsTo(models.Subject, { foreignKey: 'subjectId'});
+      Schedule.belongsTo(models.Subject, {foreignKey: 'subjectId'});
     }
   }
   Schedule.init({
     subjectId: DataTypes.STRING,
-    date: DataTypes.DATE,
     day:{
       type: DataTypes.ENUM,
         values: ["senin", "selasa", "rabu", "kamis", "jumat"],
