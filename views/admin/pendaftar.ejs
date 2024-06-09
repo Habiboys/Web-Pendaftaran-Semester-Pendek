@@ -1,12 +1,10 @@
 <%- include('layout/header') %>
 <h1 class="text-2xl font-bold mb-4 mt-6"><%= page %></h1>
-
 <% if (success) { %>
   <div class="bg-green-500 text-white p-3 rounded mb-4">
     <p><%= success %></p>
   </div>
 <% } %>
-
 <table class="table w-full mt-4">
   <thead>
     <tr>
@@ -25,13 +23,17 @@
     <% mhs.forEach(m => { %>
       <tr>
         <td><%= i %></td>
-        <td><%= m.date %></td>
+        <td><%= m.date.toLocaleDateString() %></td>
         <td><%= m.Student.nim %></td>
         <td><%= m.Student.name %></td>
         <td><%= m.Subject.name %></td>
         <td><%= m.Subject.status %></td>
         <td>
-          <a href="#" class="btn btn-sm btn-warning mr-2">Lihat</a>
+          <% if (m.Subject.status === 'inactive') { %>
+            <button class="btn btn-sm btn-warning mr-2" disabled>Lihat</button>
+          <% } else { %>
+            <label for="lihat-modal-<%= m.id %>" class="btn btn-sm btn-warning mr-2 modal-button">Lihat</label>
+          <% } %>
         </td>
         <td>
           <div class="flex">
@@ -40,7 +42,19 @@
           </div>
         </td>
       </tr>
-
+      <!-- Modal Lihat -->
+      <input type="checkbox" id="lihat-modal-<%= m.id %>" class="modal-toggle" />
+      <div class="modal">
+        <div class="modal-box">
+          <h3 class="font-bold text-lg">Bukti Pembayaran</h3>
+          <!-- <img src="/images/logounand.png"  alt="Bukti Pembayaran" class="max-w-full"> -->
+          <img src="/uploads/<%= m.paymentProof %>"  alt="Bukti Pembayaran" class="max-w-full">
+          
+          <div class="modal-action">
+            <label for="lihat-modal-<%= m.id %>" class="btn btn-secondary">Tutup</label>
+          </div>
+        </div>
+      </div>
       <!-- Modal Verifikasi -->
       <input type="checkbox" id="verifikasi-modal-<%= m.id %>" class="modal-toggle" />
       <div class="modal">
@@ -55,7 +69,6 @@
           </div>
         </div>
       </div>
-
       <!-- Modal Tolak -->
       <input type="checkbox" id="tolak-modal-<%= m.id %>" class="modal-toggle" />
       <div class="modal">
@@ -70,7 +83,6 @@
           </div>
         </div>
       </div>
-
       <% i++; %>
     <% }) %>
   </tbody>

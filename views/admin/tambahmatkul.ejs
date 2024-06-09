@@ -1,6 +1,10 @@
 <%- include('layout/header') %>
   <h2 class="card-title">Form Tambah Mata Kuliah</h2>
-
+  <% if (maxsks) { %>
+    <div class="bg-red-500 text-white p-3 rounded mb-4 mt-4">
+      <p><%= maxsks %></p>
+    </div>
+    <% } %>
 
   <form method="post" action="/admin/tambah-matkul">
     <div class="form-control">

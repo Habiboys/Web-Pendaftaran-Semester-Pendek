@@ -7,8 +7,9 @@ module.exports = (sequelize, DataTypes) => {
 
     static associate(models) {
       Subject.belongsTo(models.Lecturer, { foreignKey: 'lecturerNip'});
-      Subject.hasMany(models.Schedule, { foreignKey: 'subjectId'});
-      Subject.hasMany(models.Registration, { foreignKey: 'subjectId'});
+      Subject.hasMany(models.Schedule, { onDelete: 'CASCADE', foreignKey: 'subjectId'});
+      Subject.hasMany(models.Registration, {onDelete: 'CASCADE',   foreignKey: 'subjectId'});
+      
     }
   }
   Subject.init({

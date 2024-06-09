@@ -37,28 +37,11 @@
               </ul>
             </details>
           </li>
-          <li class="my-1 ">
-            <details <% if (page == 'Pendaftar' || page == 'Mahasiswa Aktif'  ) { %> open <% } %> >
-              <summary class="py-3 <% if (page == 'Pendaftar' || page == 'Mahasiswa Aktif'  ) { %> bg-primary text-primary-content rounded-lg my-1 <% } %> ">
-                <hero-icon name="collection" class="" />
-                <span>Mahasiswa</span>
-                <hero-icon name="chevron-down"  />
-              </summary>
-              <ul class="mt-4">
-                <li  class="my-1 <% if (page == 'Pendaftar') { %> text-primary <% } %>">
-                  <a href="/admin/pendaftar">Pendaftar</a>
-                </li>
-                <li class="my-1 <% if (page == 'Mahasiswa Aktif') { %> text-primary <% } %>">
-                  <a href="/admin/mahasiswa-aktif">Mahasiswa Aktif</a>
-                </li>
-              </ul>
-            </details>
-          </li>
-          
-          <li class="my-1">
-            <a class="flex items-center py-3">
+   
+          <li class="my-1 <% if (page == 'Pendaftar') { %> <%= 'bg-primary text-primary-content rounded-lg my-1' %> <% } %>">
+            <a class="flex items-center py-3" href="/admin/pendaftar">
               <hero-icon name="collection" />
-              <span>Jadwal Kuliah</span>
+              <span>Pendaftar</span>
             </a>
           </li>
           <li class="my-1">

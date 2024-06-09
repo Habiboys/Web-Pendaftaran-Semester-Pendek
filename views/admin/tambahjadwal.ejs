@@ -1,0 +1,96 @@
+<!-- views/admin/tambah-jadwal.ejs -->
+
+<%- include('layout/header') %>
+<div class="mt-4">
+  <h1 class="text-2xl font-bold mb-4"><%= page %></h1>
+</div>
+<% if (konflik) { %>
+    <div class="alert alert-error shadow-lg mb-4 text-white">
+      <div>
+        <span><%= konflik %></span>
+      </div>
+    </div>
+    <% } %>
+
+<form action="/admin/mata-kuliah-aktif/jadwal/tambah-jadwal/<%= matkul.id %>" method="POST" id="jadwalForm">
+
+  <div class="form-control w-full">
+    <label class="label" for="day">
+      <span class="label-text">Hari</span>
+    </label>
+    <select id="day" name="day" class="select select-bordered">
+      <option value="" selected>Pilih Hari</option>
+      <option value="senin">Senin</option>
+      <option value="selasa">Selasa</option>
+      <option value="rabu">Rabu</option>
+      <option value="kamis">Kamis</option>
+      <option value="jumat">Jumat</option>
+    </select>
+ 
+  </div>
+  <% if (error) { %>
+    <% error.forEach(er=> { %>
+      <% if (er.path === 'day') { %>
+        <span class="text-red-500"><%= er.msg %></span>
+      <% } %>
+    <% }); %>
+  <% } %>
+  <div class="form-control w-full">
+    <label class="label" for="timeStart">
+      <span class="label-text">Waktu Mulai</span>
+    </label>
+    <input type="time" id="timeStart" name="timeStart" class="input input-bordered w-full" />
+    <% if (error) { %>
+      <% error.forEach(er=> { %>
+        <% if (er.path === 'timeStart') { %>
+          <span class="text-red-500"><%= er.msg %></span>
+        <% } %>
+      <% }); %>
+    <% } %>
+  </div>
+
+  <div class="form-control w-full">
+    <label class="label" for="timeEnd">
+      <span class="label-text">Waktu Selesai</span>
+    </label>
+    <input type="time" id="timeEnd" name="timeEnd" class="input input-bordered w-full" />
+    <% if (error) { %>
+      <% error.forEach(er=> { %>
+        <% if (er.path === 'timeEnd') { %>
+          <span class="text-red-500"><%= er.msg %></span>
+        <% } %>
+      <% }); %>
+    <% } %>
+  </div>
+
+  <div class="form-control w-full">
+    <label class="label" for="building">
+      <span class="label-text">Gedung</span>
+    </label>
+    <input type="text" id="building" name="building" class="input input-bordered w-full" />
+    <% if (error) { %>
+      <% error.forEach(er=> { %>
+        <% if (er.path === 'building') { %>
+          <span class="text-red-500"><%= er.msg %></span>
+        <% } %>
+      <% }); %>
+    <% } %>
+  </div>
+
+  <div class="form-control w-full">
+    <label class="label" for="room">
+      <span class="label-text">Ruangan</span>
+    </label>
+    <input type="text" id="room" name="room" class="input input-bordered w-full" />
+    <% if (error) { %>
+      <% error.forEach(er=> { %>
+        <% if (er.path === 'room') { %>
+          <span class="text-red-500"><%= er.msg %></span>
+        <% } %>
+      <% }); %>
+    <% } %>
+  </div>
+
+  <button type="submit" class="btn btn-primary mt-4">Simpan</button>
+</form>
+<%- include('layout/footer') %>

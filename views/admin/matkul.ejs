@@ -9,6 +9,11 @@
   <p><%= success %></p>
 </div>
 <% } %>
+<% if (error) { %>
+  <div class="bg-red-500 text-white p-3 rounded mb-4">
+    <p><%= error %></p>
+  </div>
+  <% } %>
 
 <div class="overflow-x-auto">
   <table class="table w-full">
@@ -61,6 +66,7 @@
   <div class="modal-box">
     <h3 class="font-bold text-lg">Konfirmasi Penghapusan</h3>
     <p>Apakah Anda yakin ingin menghapus mata kuliah <%= subject.name %>?</p>
+    <p>Semua data yg berhubungan dengan matakuliah ini akan ikut terhapus</p>
     <div class="modal-action">
       <form action="/admin/delete-matkul/<%= subject.id %>" method="post">
         <button type="submit" class="btn btn-error">Ya, Hapus</button>
@@ -78,6 +84,7 @@
   <div class="modal-box">
     <h3 class="font-bold text-lg">Konfirmasi Penutupan Mata Kuliah</h3>
     <p>Apakah Anda yakin ingin menutup mata kuliah <%= subject.name %>?</p>
+   
     <div class="modal-action">
       <form action="/admin/close-matkul/<%= subject.id %>" method="post">
         <button type="submit" class="btn btn-primary">Ya, Tutup</button>

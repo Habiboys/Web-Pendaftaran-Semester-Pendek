@@ -1,7 +1,7 @@
 <%- include('layout/header') %>
 <div class="flex justify-between mt-4">
   <h1 class="text-2xl font-bold mb-4 mt-2"><%= page %></h1>
-  <a href="/admin/tambah-jadwal" class="btn btn-sm btn-primary mt-4">
+  <a href="/admin/mata-kuliah-aktif/jadwal/tambah-jadwal/<%= matkul.id %>" class="btn btn-sm btn-primary mt-4">
     + Tambah</a
   >
 </div>
@@ -16,7 +16,6 @@
     <thead>
       <tr>
         <th>No</th>
-        <th>Tanggal</th>
         <th>Hari</th>
         <th>Pukul</th>
         <th>Gedung</th>
@@ -28,16 +27,15 @@
       <% let no = 1; %> <% jadwal.forEach(schedule => { %>
       <tr>
         <td><%= no %></td>
-        <td><%= schedule.date.toLocaleDateString() %></td>
         <td><%= schedule.day %></td>
-        <td><%= schedule.timeStart %> s/d <%= schedule.timeEnd %></td>
+        <td><%= schedule.timeStart.split(':').slice(0, 2).join(':') %> s/d <%= schedule.timeEnd.split(':').slice(0, 2).join(':') %></td>
         <td><%= schedule.building %></td>
         <td><%= schedule.room %></td>
         <td>
           <div class="flex">
             <div>
               <a
-                href="/admin/edit-jadwal/<%= schedule.id %>"
+                href="/admin/mata-kuliah-aktif/jadwal/edit-jadwal/<%= schedule.subjectId %>/<%= schedule.id %>"
                 class="btn btn-sm btn-warning mr-2"
                 >Edit</a
               >
@@ -68,7 +66,7 @@
     <h3 class="font-bold text-lg">Konfirmasi Penghapusan</h3>
     <p>Apakah Anda yakin ingin menghapus jadwal ini?</p>
     <div class="modal-action">
-      <form action="/admin/delete-jadwal/<%= schedule.id %>" method="post">
+      <form action="/admin/mata-kuliah-aktif/jadwal/delete-jadwal/<%= schedule.id %>" method="post">
         <button type="submit" class="btn btn-error">Ya, Hapus</button>
       </form>
       <label for="delete-modal-<%= schedule.id %>" class="btn">Batal</label>

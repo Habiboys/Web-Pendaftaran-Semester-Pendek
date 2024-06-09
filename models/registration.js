@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
  
     static associate(models) {
       Registration.belongsTo(models.Subject, { foreignKey: 'subjectId'});
-      Registration.belongsTo(models.Student, { foreignKey: 'studentNim'});
+      Registration.belongsTo(models.Student, {  foreignKey: 'studentNim'});
     }
   }
   Registration.init({
