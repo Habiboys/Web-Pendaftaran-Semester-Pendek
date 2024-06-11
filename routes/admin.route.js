@@ -16,6 +16,7 @@ router.post('/edit-matkul/:id', verifyUser('admin') , controller.updateMatkul);
 router.post('/delete-matkul/:id', verifyUser('admin') , controller.deleteMatkul);
 router.post('/close-matkul/:id', verifyUser('admin') , controller.tutupMatkul);
 router.get('/mata-kuliah-aktif', verifyUser('admin') , controller.matkulaktif); 
+router.get('/mata-kuliah-aktif/:subjectId/mahasiswa', verifyUser('admin') , controller.mahasiswa); 
 
 router.get('/mata-kuliah-aktif/jadwal/:id', verifyUser('admin') , controller.jadwal); 
 router.get('/mata-kuliah-aktif/jadwal/tambah-jadwal/:id', verifyUser('admin'), controller.tambahJadwal);
@@ -26,8 +27,8 @@ router.post('/mata-kuliah-aktif/jadwal/edit-jadwal/:subjectId/:id', verifyUser('
 
 
 router.get('/pendaftar', verifyUser('admin') , controller.pendaftar); 
-router.post('/pendaftar/tolak/:studentNim/:subjectId', verifyUser('admin') , controller.tolakPendaftar); 
-// router.get('/mahasiswa-aktif', verifyUser('admin') , controller.matkulaktif); 
+router.post('/pendaftar/tolak/:studentNim/:subjectId', verifyUser('admin') , controller.tolakPendaftar);
+router.post('/pendaftar/verifikasi/:studentNim/:subjectId', verifyUser('admin') , controller.verifikasiPendaftar);
 
 
 router.get('/profile',  verifyUser('admin'), controller.view_profile);

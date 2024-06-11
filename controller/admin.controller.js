@@ -28,7 +28,7 @@ const matkul = async (req, res) => {
     const jumlahPendaftar = await Registration.count({
       where: { subjectId: m.id },
     });
-    m.dataValues.jumlahPendaftar = jumlahPendaftar;
+    m.jumlahPendaftar = jumlahPendaftar;
   }
 
   res.render("admin/matkul", {
@@ -267,6 +267,17 @@ const matkulaktif = async (req, res) => {
     },
     include: Lecturer,
   });
+
+  for (const m of matkul) {
+    const totalMhs = await Registration.count({
+      where: { 
+        subjectId: m.id,
+        status: 'verified',
+       },
+    });
+    m.totalMhs= totalMhs;
+  }
+
   res.render("admin/matkulaktif", {
     user,
     page: "Mata Kuliah Aktif",
@@ -277,6 +288,9 @@ const matkulaktif = async (req, res) => {
 const pendaftar = async (req, res) => {
   const user = await User.findByPk(req.userId);
   let mhs = await Registration.findAll({
+    where:{
+      status: 'unverified'
+    },
     include: [Subject, Student],
   });
 
@@ -285,9 +299,31 @@ const pendaftar = async (req, res) => {
     page: "Pendaftar",
     mhs,
     success: req.cookies.success,
+    error: req.cookies.error,
   });
 };
 
+const verifikasiPendaftar = async (req,res)=>{
+  const {studentNim, subjectId}= req.params;
+
+  const pendaftar = await Registration.findOne({
+    where:{
+      studentNim: studentNim,
+      subjectId: subjectId,
+      paymentProof: {
+        [Op.ne]: null 
+      }
+    }
+  })
+  if(!pendaftar){
+    res.cookie("error", "Gagal Memverifikasi Pendaftar", { maxAge: 1000, httpOnly: true });
+    return res.redirect(`/admin/pendaftar`);
+  }
+   pendaftar.status = "verified";
+   await pendaftar.save();
+   res.cookie("success", "Pendaftar Berhasi Diverifikasi", { maxAge: 1000, httpOnly: true });
+   return res.redirect(`/admin/pendaftar`);
+}
 const tolakPendaftar = async (req, res) => {
   const { studentNim, subjectId } = req.params;
   const mhs = await Registration.findOne({
@@ -655,6 +691,35 @@ const updateJadwal = [
   },
 ];
 
+
+const mahasiswa = async(req,res)=>{
+  const user= await User.findByPk(req.userId);
+  const {subjectId}= req.params;
+  const mhs= await Registration.findAll({
+    where:{
+      subjectId: subjectId,
+      status: "verified",
+    },
+    include:[
+      {
+        model:Student,
+        include:[User]
+        }]
+  });
+  const matkul = await Subject.findByPk(subjectId);
+
+  return res.render("admin/mahasiswa", {
+    user,
+    page: "Mahasiswa",
+    mhs,
+    matkul,
+  });
+
+  
+}
+
+
+
 module.exports = {
   view_profile,
   dashboard,
@@ -674,4 +739,6 @@ module.exports = {
   deleteJadwal,
   editJadwal,
   updateJadwal,
+  mahasiswa,
+  verifikasiPendaftar,
 };

@@ -26,9 +26,10 @@
         <td><%= subject.credit %></td>
         <td><%= subject.semester %></td>
         <td><%= subject.Lecturer.name %></td>
-        <td>0/<%= subject.capacity %></td>
+        <td><%= subject.totalMhs  %>/<%= subject.capacity %></td>
+        
         <td>
-          <a href="#" class="btn btn-sm btn-primary mr-2">Mahasiswa</a>
+          <a href="/admin/mata-kuliah-aktif/<%= subject.id %>/mahasiswa" class="btn btn-sm btn-primary mr-2">Mahasiswa</a>
           <a href="/admin/mata-kuliah-aktif/jadwal/<%= subject.id %>" class="btn btn-sm btn-warning mr-2">Jadwal</a>
         </td>
         

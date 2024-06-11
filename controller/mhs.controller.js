@@ -88,7 +88,7 @@ const view_matkul = async (req, res) => {
 
     for (const m of matkul) {
       const jumlahPendaftar = await Registration.count({ where: { subjectId: m.id } });
-      m.dataValues.jumlahPendaftar = jumlahPendaftar;
+      m.jumlahPendaftar = jumlahPendaftar;
     }
 
     res.render("mahasiswa/matkul", {
@@ -121,10 +121,21 @@ const daftarMatkul = async (req, res) => {
         studentNim: mhs.Student.nim,
         subjectId: matkul.id,
         paymentProof: {
-          [Op.ne]: null // Memeriksa apakah paymentProof tidak null
+          [Op.ne]: null 
         }
       }
     });
+
+    const hasVerified = await Registration.findOne({
+      where: {
+        studentNim: mhs.Student.nim,
+        subjectId: matkul.id,
+        status: 'verified'
+      }
+    });
+
+
+
     console.log(hasUpload);
     res.render("mahasiswa/detailMatkul", {
       title: "Mata Kuliah",
@@ -133,6 +144,7 @@ const daftarMatkul = async (req, res) => {
       hasRegis,
       hasUpload,
       deadline,
+      hasVerified,
       error: req.cookies.error,
       success: req.cookies.success,
     });

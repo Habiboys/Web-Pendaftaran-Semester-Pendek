@@ -1,0 +1,36 @@
+<%- include('layout/header') %>
+<!-- Konten utama di sini -->
+<div class="flex justify-between  mt-4">
+  <h1 class="text-2xl font-bold mb-4 mt-2"><%= page %> <span><%= matkul.name %></span></h1>
+</div>
+<div class="overflow-x-auto">
+  <table class="table w-full">
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Nim</th>
+        <th>Nama</th>
+        <th>Jenis Kelamin</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+        <% let i=1; %>
+      <% mhs.forEach(m => { %>
+      <tr>
+        <td><%= i %></td>
+        <td><%= m.Student.nim %></td>
+        <td><%= m.Student.name %></td>
+        <td><%= m.Student.gender %></td>
+        <td><%= m.Student.User.email%></td>
+      </tr>
+      <% i++; %>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+
+
+
+<%- include('layout/footer') %>

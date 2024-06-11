@@ -33,8 +33,8 @@ module.exports = {
         allowNull: true,
       },
       status: {
-        type: Sequelize.ENUM("verify", "unverify"),
-        defaultValue: "unverify",
+        type: Sequelize.ENUM("verified", "unverified"),
+        defaultValue: "unverified",
         allowNull: false,
       },
       createdAt: {
