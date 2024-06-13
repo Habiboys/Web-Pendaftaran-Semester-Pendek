@@ -6,88 +6,136 @@
     <p class="text-sm text-gray-600">SKS: <%= matkul.credit %></p>
     <p class="text-sm text-gray-600">Semester: <%= matkul.semester %></p>
     <% if(!hasRegis && matkul.status==='active') { %>
-      <div class="bg-red-500 text-white p-3 rounded mt-12 text-center">
-        <p>Pendaftaran Sudah Ditutup</p>
-      </div>
-    <% } else if(hasRegis && matkul.status==='active'){ %>
+    <div class="bg-red-500 text-white p-3 rounded mt-12 text-center">
+      <p>Pendaftaran Sudah Ditutup</p>
+    </div>
+    <% }else if (hasVerified){ %>
+    <div class="text-center">
       <div class="bg-green-500 text-white p-3 rounded mt-12 text-center">
-        <%  if(!hasUpload ){ %>
-        <p>Anda Telah Tergabung dengan matakuliah ini silahkan upload bukti pembayaran untuk konfirmasi pembayaran</p>
-        <p class="text-bold">Batas: <%= deadline %></p>
-        <p class="mt-4">note: jika melewati batas waktu anda akan dikeluarkan dari matakuliah ini, jika ada kendala silahkan hubungi departemen</p>
-        <% } else{ %>
-          <p>Anda Telah Mengupload Bukti pembayaran mohon tunggu verifikasi dari admin</p>
-        <% } %>
+        <p>
+          Anda telah diverifikasi dan resmi bergabung dengan matakuliah ini
+          silahkan download jadwal perkuiahan dibawah ini
+        </p>
       </div>
-      <div class="flex justify-center mt-8">
-        <div>
-          <h3 class="text-l mb-2 text-center">Silahkan Upload Bukti Pembayaran</h3>
-          <% if (error) { %>
-            <p class="text-center text-error mb-2"><%= error %></p>
-            <% } %>
-          <% if (success) { %>
-            <p class="text-center text-primary mb-2"><%= success %></p>
-            <% } %>
-          <form action="/mata-kuliah/daftar/<%= matkul.id %>/upload" method="post" enctype="multipart/form-data">
-            <div class="form-control w-full max-w-xs" id="file-input-container">
-              <% if (hasUpload && hasUpload.paymentProof) { %>
-                <p class="mt-2" id="uploaded-file-name"><%= hasUpload.paymentProof %></p>
-                <button type="button" class="btn btn-primary mt-4" id="upload-again-btn">Upload Ulang</button>
-              <% } else { %>
-                <div id="file-input-wrapper">
-                  <input type="file" id="paymentProof" name="paymentProof" class="file-input file-input-bordered w-full max-w-xs" />
-                  <div class="flex justify-center mt-4" id="upload-btn-container">
-                    <button type="submit" class="btn btn-primary">Upload</button>
-                  </div>
-                </div>
-              <% } %>
+
+      <form action="" method="POST">
+        <button type="submit" class="btn btn-primary mt-4">Donwload</button>
+      </form>
+    </div>
+    <% } else if(!hasVerified && hasRegis && matkul.status==='active' ){ %>
+    <div class="bg-green-500 text-white p-3 rounded mt-12 text-center">
+      <% if(!hasUpload ){ %>
+      <p>
+        Anda Telah Tergabung dengan matakuliah ini silahkan upload bukti
+        pembayaran untuk konfirmasi pembayaran
+      </p>
+      <p class="text-bold">Batas: <%= deadline %></p>
+      <p class="mt-4">
+        note: jika melewati batas waktu anda akan dikeluarkan dari matakuliah
+        ini, jika ada kendala silahkan hubungi departemen
+      </p>
+      <% } else{ %>
+      <p>
+        Anda Telah Mengupload Bukti pembayaran mohon tunggu verifikasi dari
+        admin
+      </p>
+      <% } %>
+    </div>
+    <div class="flex justify-center mt-8">
+      <div>
+        <h3 class="text-l mb-2 text-center">
+          Silahkan Upload Bukti Pembayaran
+        </h3>
+        <% if (error) { %>
+        <p class="text-center text-error mb-2"><%= error %></p>
+        <% } %> <% if (success) { %>
+        <p class="text-center text-primary mb-2"><%= success %></p>
+        <% } %>
+        <form
+          action="/mata-kuliah/daftar/<%= matkul.id %>/upload"
+          method="post"
+          enctype="multipart/form-data"
+        >
+          <div class="form-control w-full max-w-xs" id="file-input-container">
+            <% if (hasUpload && hasUpload.paymentProof) { %>
+            <p class="mt-2" id="uploaded-file-name">
+              <%= hasUpload.paymentProof %>
+            </p>
+            <button
+              type="button"
+              class="btn btn-primary mt-4"
+              id="upload-again-btn"
+            >
+              Upload Ulang
+            </button>
+            <% } else { %>
+            <div id="file-input-wrapper">
+              <input
+                type="file"
+                id="paymentProof"
+                name="paymentProof"
+                class="file-input file-input-bordered w-full max-w-xs"
+              />
+              <div class="flex justify-center mt-4" id="upload-btn-container">
+                <button type="submit" class="btn btn-primary">Upload</button>
+              </div>
             </div>
-          </form>
-        </div>
-      </div>
-    <% } else if(!hasRegis) { %>
-      <div class="mt-16 ">
-        <% if (error){ %>
-        <p class="text-center text-error mb-2">Anda telah mencapai batas SKS</p>
-        <% } %>
-        <label for="konfirmasi-modal" class="btn btn-primary w-full modal-button">Daftar</label>
-      </div>
-      <!-- Modal Konfirmasi Pendaftaran -->
-      <input type="checkbox" id="konfirmasi-modal" class="modal-toggle" />
-      <div class="modal">
-        <div class="modal-box">
-          <h3 class="font-bold text-lg">Konfirmasi Pendaftaran</h3>
-          <p class="py-4">Apakah Anda yakin ingin mendaftar mata kuliah <%= matkul.name %>?</p>
-          <div class="modal-action">
-            <form action="/mata-kuliah/daftar/<%= matkul.id %>" method="post">
-              <button type="submit" class="btn btn-primary">Ya</button>
-            </form>
-            <label for="konfirmasi-modal" class="btn btn-base-100">Batal</label>
+            <% } %>
           </div>
+        </form>
+      </div>
+    </div>
+    <% } else if(!hasRegis) { %>
+    <div class="mt-16">
+      <% if (error){ %>
+      <p class="text-center text-error mb-2">Anda telah mencapai batas SKS</p>
+      <% } %>
+      <label for="konfirmasi-modal" class="btn btn-primary w-full modal-button"
+        >Daftar</label
+      >
+    </div>
+    <!-- Modal Konfirmasi Pendaftaran -->
+    <input type="checkbox" id="konfirmasi-modal" class="modal-toggle" />
+    <div class="modal">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg">Konfirmasi Pendaftaran</h3>
+        <p class="py-4">
+          Apakah Anda yakin ingin mendaftar mata kuliah <%= matkul.name %>?
+        </p>
+        <div class="modal-action">
+          <form action="/mata-kuliah/daftar/<%= matkul.id %>" method="post">
+            <button type="submit" class="btn btn-primary">Ya</button>
+          </form>
+          <label for="konfirmasi-modal" class="btn btn-base-100">Batal</label>
         </div>
       </div>
+    </div>
     <% } else { %>
-      <div class="bg-green-500 text-white p-3 rounded mt-12 text-center">
-        <p>Anda Telah Mendaftar Matakuliah Ini Mohon Tunggu Pemberitahuan Selanjutnya</p>
-      </div>
+    <div class="bg-green-500 text-white p-3 rounded mt-12 text-center">
+      <p>
+        Anda Telah Mendaftar Matakuliah Ini Mohon Tunggu Pemberitahuan
+        Selanjutnya
+      </p>
+    </div>
     <% } %>
   </div>
 </div>
 <%- include('layout/footer') %>
 
 <script>
-  const fileInputContainer = document.getElementById('file-input-container');
-  const uploadedFileName = document.getElementById('uploaded-file-name');
-  const uploadAgainBtn = document.getElementById('upload-again-btn');
-  const fileInputWrapper = document.getElementById('file-input-wrapper');
-  const uploadBtnContainer = document.getElementById('upload-btn-container');
+  const fileInputContainer = document.getElementById("file-input-container");
+  const uploadedFileName = document.getElementById("uploaded-file-name");
+  const uploadAgainBtn = document.getElementById("upload-again-btn");
+  const fileInputWrapper = document.getElementById("file-input-wrapper");
+  const uploadBtnContainer = document.getElementById("upload-btn-container");
 
-  uploadAgainBtn.addEventListener('click', () => {
-    fileInputContainer.innerHTML = '<div id="file-input-wrapper"><input type="file" id="paymentProof" name="paymentProof" class="file-input file-input-bordered w-full max-w-xs" /><div class="flex justify-center mt-4" id="upload-btn-container"><button type="submit" class="btn btn-primary">Upload</button></div></div>';
+  uploadAgainBtn.addEventListener("click", () => {
+    fileInputContainer.innerHTML =
+      '<div id="file-input-wrapper"><input type="file" id="paymentProof" name="paymentProof" class="file-input file-input-bordered w-full max-w-xs" /><div class="flex justify-center mt-4" id="upload-btn-container"><button type="submit" class="btn btn-primary">Upload</button></div></div>';
   });
 
   // Menyembunyikan tombol "Upload" jika file sudah diupload
   if (hasUpload && hasUpload.paymentProof) {
-    fileInputWrapper.style.display = 'none';
+    fileInputWrapper.style.display = "none";
   }
 </script>

@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     paymentProof: DataTypes.STRING,
     status:{
       type: DataTypes.ENUM,
-      values: ["verify", "unverify"],
+      values: ["verified", "unverified"],
     },
   }, {
     sequelize,
