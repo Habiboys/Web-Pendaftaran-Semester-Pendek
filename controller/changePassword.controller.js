@@ -17,6 +17,7 @@ const view_form = async (req, res) => {
       error: req.cookies.error,
       success: req.cookies.success,
       role: req.userRole,
+      userId: req.userId,
     });
   } else if (role === "dosen") {
     return res.render("dosen/ubahpassword", {
