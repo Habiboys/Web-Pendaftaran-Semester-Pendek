@@ -1,0 +1,41 @@
+<%- include('layout/header') %>
+
+<div class="container my-10 px-16 mt-12">
+    <h1 class="text-3xl font-bold mb-6">Notifikasi</h1>
+
+    <div class="mb-8">
+        <h2 class="text-xl font-semibold mb-4">Belum Dibaca</h2>
+        <div id="new-notifpage">
+        <% notif.forEach(function(n) { 
+            if (n.status === 'unread') { %>
+                <div class="div">
+            <a href="/notifikasi/read/<%= n.id %>" class="block p-4 bg-white rounded-lg shadow-md mb-4 hover:shadow-lg transition-shadow">
+                <div>
+                    <h3 class="text-lg font-semibold mb-2"><%= n.title %></h3>
+                    <p class="text-gray-700 mb-2"><%= n.message %></p>
+                    <p class="text-sm text-gray-500"><%= moment(n.createdAt).format('DD MMMM YYYY, HH:mm') %></p>
+                </div>
+            </a>
+        </div>
+            <% } 
+        }); %>
+    </div>
+    </div>
+
+    <div>
+        <h2 class="text-xl font-semibold mb-4">Sudah Dibaca</h2>
+        <% notif.forEach(function(n) { 
+            if (n.status === 'read') { %>
+            <a href="/mata-kuliah/daftar/<%= n.subjectId %>" class="block p-4 bg-white rounded-lg shadow-md mb-4 hover:shadow-lg transition-shadow">
+                <div class="text-gray-500">
+                    <h3 class="text-lg font-semibold mb-2"><%= n.title %></h3>
+                    <p class=" mb-2"><%= n.message %></p>
+                    <p class="text-sm text-gray-500"><%= moment(n.createdAt).format('DD MMMM YYYY, HH:mm') %></p>
+                </div>
+            </a>
+            <% } 
+        }); %>
+    </div>
+</div>
+
+<%- include('layout/footer') %>

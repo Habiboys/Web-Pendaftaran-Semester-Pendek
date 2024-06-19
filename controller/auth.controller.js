@@ -86,6 +86,8 @@ const logout = async (req, res) => {
   res.redirect("/");
 };
 
+
+
 module.exports = {
   form,
   checklogin,

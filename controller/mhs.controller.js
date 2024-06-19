@@ -1,12 +1,24 @@
-const { User, Student, Subject, Registration } = require("../models/index");
+const {
+  User,
+  Student,
+  Subject,
+  Registration,
+  Notification,
+} = require("../models/index");
 const jwt = require("jsonwebtoken");
 const moment = require("moment");
 const multer = require("multer");
-const fs = require('fs');
-const path = require('path');
-const { Op } = require('sequelize');
+const fs = require("fs");
+const path = require("path");
+const { Op } = require("sequelize");
+require("dotenv").config();
 
+const PushNotifications = require("@pusher/push-notifications-server");
 
+const beamsClient = new PushNotifications({
+  instanceId: process.env.INSTANCE_ID,
+  secretKey: process.env.PUSHER_SECRET_KEY,
+});
 
 const cekLogin = async (req, res, next) => {
   let token = req.cookies.token;
@@ -60,9 +72,28 @@ const cekLogin = async (req, res, next) => {
   }
 };
 
+const authBeam = async (req, res) => {
+  await cekLogin(req, res, () => {
+    const userId = req.userId.toString();
+    const userIDInQueryParam = req.query["user_id"];
+    console.log(userId);
+    console.log(userIDInQueryParam);
+    if (userId != userIDInQueryParam) {
+      res.status(401).send("Permintaan tidak konsisten");
+    } else {
+      const beamsToken = beamsClient.generateToken(userId);
+      res.send(JSON.stringify(beamsToken));
+    }
+  });
+};
+
 const view_home = async (req, res) => {
   await cekLogin(req, res, () => {
-    res.render("mahasiswa/home", { title: "Home", role: req.userRole });
+    res.render("mahasiswa/home", {
+      title: "Home",
+      role: req.userRole,
+      userId: req.userId,
+    });
   });
 };
 
@@ -78,6 +109,7 @@ const view_profile = async (req, res) => {
       tanggalLahir,
       title: "Home",
       role: req.userRole,
+      userId: req.userId,
     });
   });
 };
@@ -87,7 +119,11 @@ const view_matkul = async (req, res) => {
     const matkul = await Subject.findAll();
 
     for (const m of matkul) {
-      const jumlahPendaftar = await Registration.count({ where: { subjectId: m.id } });
+
+      const jumlahPendaftar = await Registration.count({
+        where: { subjectId: m.id },
+      });
+
       m.jumlahPendaftar = jumlahPendaftar;
     }
 
@@ -95,59 +131,63 @@ const view_matkul = async (req, res) => {
       title: "Daftar Mata Kuliah",
       role: req.userRole,
       matkul,
+      userId: req.userId,
     });
   });
 };
 
 const daftarMatkul = async (req, res) => {
-
-    const { id } = req.params;
-    const matkul = await Subject.findByPk(id);
-    if (!matkul) {
-      return res.redirect("/notfound");
-    }
-    const mhs = await User.findByPk(req.userId, {
-      include: Student,
-    });
-    const deadline = moment(matkul.createdAt).add(5, 'days').format('DD MMMM YYYY');
-    const hasRegis = await Registration.findOne({
-      where: {
-        subjectId: matkul.id,
-        studentNim: mhs.Student.nim,
+  const { id } = req.params;
+  const matkul = await Subject.findByPk(id);
+  if (!matkul) {
+    return res.redirect("/notfound");
+  }
+  const mhs = await User.findByPk(req.userId, {
+    include: Student,
+  });
+  const deadline = moment(matkul.createdAt)
+    .add(5, "days")
+    .format("DD MMMM YYYY");
+  const hasRegis = await Registration.findOne({
+    where: {
+      subjectId: matkul.id,
+      studentNim: mhs.Student.nim,
+    },
+  });
+  const hasUpload = await Registration.findOne({
+    where: {
+      studentNim: mhs.Student.nim,
+      subjectId: matkul.id,
+      paymentProof: {
+        [Op.ne]: null,
       },
-    });
-    const hasUpload = await Registration.findOne({
-      where: {
-        studentNim: mhs.Student.nim,
-        subjectId: matkul.id,
-        paymentProof: {
-          [Op.ne]: null 
-        }
-      }
-    });
 
-    const hasVerified = await Registration.findOne({
-      where: {
-        studentNim: mhs.Student.nim,
-        subjectId: matkul.id,
-        status: 'verified'
-      }
-    });
+    },
+  });
 
+  const hasVerified = await Registration.findOne({
+    where: {
+      studentNim: mhs.Student.nim,
+      subjectId: matkul.id,
+      status: "verified",
+    },
+  });
 
+  console.log(hasUpload);
+  res.render("mahasiswa/detailMatkul", {
+    title: "Mata Kuliah",
+    role: req.userRole,
+    matkul,
+    hasRegis,
+    hasUpload,
+    deadline,
+    hasVerified,
+    error: req.cookies.error,
+    success: req.cookies.success,
+    userId: req.userId,
+  });
 
-    console.log(hasUpload);
-    res.render("mahasiswa/detailMatkul", {
-      title: "Mata Kuliah",
-      role: req.userRole,
-      matkul,
-      hasRegis,
-      hasUpload,
-      deadline,
-      hasVerified,
-      error: req.cookies.error,
-      success: req.cookies.success,
-    });
+  
 };
 
 const prosesDaftar = async (req, res) => {
@@ -181,7 +221,6 @@ const prosesDaftar = async (req, res) => {
   const totalSKSToRegister = totalSKS + subject.credit;
 
   if (totalSKSToRegister > 9) {
-
     res.cookie("error", "Anda Telah Mencapai Batas maksimum sks", {
       maxAge: 1000,
       httpOnly: true,
@@ -207,15 +246,15 @@ const prosesDaftar = async (req, res) => {
 let cekFormat = false;
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/') 
+    cb(null, "uploads/");
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname)
-  }
-})
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
 
-const fileFilter = (req , file, cb) => {
-  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' ) {
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
     cb(null, true);
   } else {
     cekFormat = true;
@@ -223,41 +262,40 @@ const fileFilter = (req , file, cb) => {
   }
 };
 
-const upload = multer({ 
+const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 5 * 1024 * 1024 
+    fileSize: 5 * 1024 * 1024,
   },
-  fileFilter: fileFilter
+  fileFilter: fileFilter,
 });
 
 const uploadFile = async (req, res) => {
   cekFormat = false;
-  upload.single('paymentProof')(req, res, async (err) => {
-  
-    if(cekFormat===true){
-      res.cookie("error","Hanya file PNG dan JPG yang diizinkan" , {
+  upload.single("paymentProof")(req, res, async (err) => {
+    if (cekFormat === true) {
+      res.cookie("error", "Hanya file PNG dan JPG yang diizinkan", {
         maxAge: 1000,
         httpOnly: true,
       });
-      return res.status(400).redirect('/mata-kuliah/daftar/' + req.params.id);
+      return res.status(400).redirect("/mata-kuliah/daftar/" + req.params.id);
     }
-    if (err ){
-    if (err.code === 'LIMIT_FILE_SIZE') {
-      res.cookie("error", "Ukuran file tidak boleh lebih dari 5MB", {
-        maxAge: 1000,
-        httpOnly: true,
-      });
-      return res.status(400).redirect('/mata-kuliah/daftar/' + req.params.id);
-    } 
-  }
+    if (err) {
+      if (err.code === "LIMIT_FILE_SIZE") {
+        res.cookie("error", "Ukuran file tidak boleh lebih dari 5MB", {
+          maxAge: 1000,
+          httpOnly: true,
+        });
+        return res.status(400).redirect("/mata-kuliah/daftar/" + req.params.id);
+      }
+    }
 
     if (!req.file) {
       res.cookie("error", "Tidak ada file yang diunggah.", {
         maxAge: 1000,
         httpOnly: true,
       });
-      return res.status(400).redirect('/mata-kuliah/daftar/' + req.params.id);
+      return res.status(400).redirect("/mata-kuliah/daftar/" + req.params.id);
     }
 
     console.log("File yang diunggah:", req.file);
@@ -274,23 +312,60 @@ const uploadFile = async (req, res) => {
     });
 
     if (daftar.paymentProof) {
-      const oldFilePath = path.join(__dirname, '../uploads', daftar.paymentProof);
+      const oldFilePath = path.join(
+        __dirname,
+        "../uploads",
+        daftar.paymentProof
+      );
       fs.unlink(oldFilePath, (unlinkErr) => {
-        if (unlinkErr) console.error('Error deleting old file:', unlinkErr);
-        else console.log('Old file deleted successfully');
+        if (unlinkErr) console.error("Error deleting old file:", unlinkErr);
+        else console.log("Old file deleted successfully");
       });
     }
-    daftar.paymentProof = req.file.filename; 
+    daftar.paymentProof = req.file.filename;
     await daftar.save();
-    res.cookie("success","File Berhasil Di Upload" , {
+    res.cookie("success", "File Berhasil Di Upload", {
       maxAge: 1000,
       httpOnly: true,
     });
-    return res.redirect('/mata-kuliah/daftar/' + req.params.id);
+    return res.redirect("/mata-kuliah/daftar/" + req.params.id);
   });
 };
 
+const notifikasi = async (req, res) => {
+  const student = await Student.findOne({
+    where: {
+      userId: req.userId,
+    },
+  });
+  const notif = await Notification.findAll({
+    where: {
+      studentNim: student.nim,
+    },
+    order: [
+      ["createdAt", "DESC"], // Urutkan berdasarkan createdAt secara descending
+    ],
+  });
+  console.log(notif);
+  res.render("mahasiswa/notifikasi", {
+    title: "Home",
+    role: req.userRole,
+    notif,
+    moment,
+    userId: req.userId,
+  });
+};
 
+const hasRead = async (req, res) => {
+  const { id } = req.params;
+
+  const notif = await Notification.findByPk(id);
+
+  notif.status = "read";
+  await notif.save();
+
+  return res.redirect("/mata-kuliah/daftar/" + notif.subjectId);
+};
 
 module.exports = {
   view_profile,
@@ -299,4 +374,7 @@ module.exports = {
   daftarMatkul,
   prosesDaftar,
   uploadFile,
+  notifikasi,
+  hasRead,
+  authBeam,
 };
