@@ -1,3 +1,4 @@
+
 var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
@@ -25,6 +26,7 @@ app.use("/auth", authRouter);
 app.use("/admin", adminRouter);
 app.use("/dosen", dosenRouter);
 
+
 app.get("/service-worker.js", (req, res) => {
   res.sendFile(path.join(__dirname, "service-worker.js"));
 });
@@ -32,7 +34,9 @@ app.get("/service-worker.js", (req, res) => {
 app.get("*", (req, res) => {
   res.status(404).render("notfound");
 });
+
 app.use(function (req, res, next) {
+
   next(createError(404));
 });
 

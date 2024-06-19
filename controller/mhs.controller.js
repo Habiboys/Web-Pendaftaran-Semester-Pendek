@@ -2,10 +2,12 @@ const {
   User,
   Student,
   Subject,
+
   Lecturer,
   Registration,
   Notification,
   Schedule,
+
 } = require("../models/index");
 const jwt = require("jsonwebtoken");
 const moment = require("moment");
@@ -13,6 +15,7 @@ const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
 const { Op } = require("sequelize");
+
 const PDFDocument = require('pdfkit');
 require("dotenv").config();
 
@@ -122,9 +125,11 @@ const view_matkul = async (req, res) => {
     const matkul = await Subject.findAll();
 
     for (const m of matkul) {
+
       const jumlahPendaftar = await Registration.count({
         where: { subjectId: m.id },
       });
+
       m.jumlahPendaftar = jumlahPendaftar;
     }
 
@@ -162,6 +167,7 @@ const daftarMatkul = async (req, res) => {
       paymentProof: {
         [Op.ne]: null,
       },
+
     },
   });
 
@@ -186,6 +192,7 @@ const daftarMatkul = async (req, res) => {
     success: req.cookies.success,
     userId: req.userId,
   });
+
 };
 
 const prosesDaftar = async (req, res) => {
@@ -327,6 +334,7 @@ const uploadFile = async (req, res) => {
       httpOnly: true,
     });
     return res.redirect("/mata-kuliah/daftar/" + req.params.id);
+
   });
 };
 
@@ -343,6 +351,8 @@ const notifikasi = async (req, res) => {
     order: [
       ["createdAt", "DESC"], // Urutkan berdasarkan createdAt secara descending
     ],
+
+
   });
   console.log(notif);
   res.render("mahasiswa/notifikasi", {
@@ -364,6 +374,7 @@ const hasRead = async (req, res) => {
 
   return res.redirect("/mata-kuliah/daftar/" + notif.subjectId);
 };
+
 
 const download = async (req, res) => {
   try {
@@ -405,8 +416,63 @@ const download = async (req, res) => {
     console.error('Error generating PDF:', error);
     res.status(500).send('Internal Server Error');
   }
+
 };
 
+
+const download = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const jadwal = await Schedule.findAll({
+      where: {
+        subjectId: id
+      },
+    });
+    const matkul = await Subject.findByPk(id,{
+      include:[Lecturer]
+    })
+
+    // Buat dokumen PDF baru
+    const doc = new PDFDocument();
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="jadwal-kuliah-Sp-${matkul.name}.pdf"`);
+
+    // Pipe output PDF ke response
+    doc.pipe(res);
+
+    // Tambahkan konten ke PDF
+    doc.fontSize(20).text(`Jadwal Kuliah Semester Pendek ${matkul.name}`, { align: 'center' });
+    doc.moveDown(0.1);
+    doc.fontSize(12).text(`Dosen Pengampu: ${matkul.Lecturer.name}`, { align: 'center' });
+    doc.moveDown(2);
+
+    jadwal.forEach((schedule, index) => {
+      doc.fontSize(12).text(`${index + 1}. Hari: ${schedule.day}`);
+      doc.text(`   Pukul: ${schedule.timeStart.split(':').slice(0, 2).join(':')} s/d ${schedule.timeEnd.split(':').slice(0, 2).join(':')}`);
+      doc.text(`   Gedung: ${schedule.building}`);
+      doc.text(`   Ruangan: ${schedule.room}`);
+      doc.moveDown(0.1);
+    });
+
+    // Selesaikan dokumen
+    doc.end();
+  } catch (error) {
+    console.error('Error generating PDF:', error);
+    res.status(500).send('Internal Server Error');
+  }
+
+};
+
+const hasRead = async (req, res) => {
+  const { id } = req.params;
+
+  const notif = await Notification.findByPk(id);
+
+  notif.status = "read";
+  await notif.save();
+
+  return res.redirect("/mata-kuliah/daftar/" + notif.subjectId);
+};
 
 module.exports = {
   view_profile,
@@ -419,4 +485,5 @@ module.exports = {
   hasRead,
   authBeam,
   download,
+
 };

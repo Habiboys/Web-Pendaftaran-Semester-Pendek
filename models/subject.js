@@ -3,6 +3,7 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Subject extends Model {
     static associate(models) {
+
       Subject.belongsTo(models.Lecturer, { foreignKey: "lecturerNip" });
       Subject.hasMany(models.Schedule, {
         onDelete: "CASCADE",
@@ -16,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
         foreignKey: "subjectId",
       });
+
     }
   }
   Subject.init(
