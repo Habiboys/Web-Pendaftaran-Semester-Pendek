@@ -2,29 +2,43 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Users', {
+    await queryInterface.createTable('Notifications', {
       id: {
         allowNull: false,
+        autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      email: {
-        type: Sequelize.STRING,
-        unique: true,
-        allowNull: false,
-      },
-      password: {
+      title: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      role: {
-        type: Sequelize.ENUM,
-        values: ["mahasiswa", "dosen", "admin"],
+      message: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
-      refreshToken: {
+      subjectId: {
         type: Sequelize.STRING,
-        allowNull: true,
+        allowNull: false,
+        references: {
+          model: "Subjects",
+          key: "id", 
+        },
+        onDelete: 'CASCADE'
+      },
+      studentNim: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        references: {
+          model: "Students",
+          key: "nim",
+        },
+        onDelete: 'CASCADE'
+      },
+      status: {
+        type: Sequelize.ENUM("read", "unread"),
+        defaultValue: "unread",
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
@@ -37,6 +51,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Users');
+    await queryInterface.dropTable('Notifications');
   }
 };

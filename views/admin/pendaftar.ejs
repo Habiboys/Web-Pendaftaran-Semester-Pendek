@@ -5,6 +5,11 @@
     <p><%= success %></p>
   </div>
 <% } %>
+<% if (error) { %>
+  <div class="bg-red-500 text-white p-3 rounded mb-4">
+    <p><%= error %></p>
+  </div>
+<% } %>
 <table class="table w-full mt-4">
   <thead>
     <tr>
@@ -24,7 +29,7 @@
       <tr>
         <td><%= i %></td>
         <td><%= m.date.toLocaleDateString() %></td>
-        <td><%= m.Student.nim %></td>
+        <td><%= m.studentNim %></td>
         <td><%= m.Student.name %></td>
         <td><%= m.Subject.name %></td>
         <td><%= m.Subject.status %></td>
@@ -32,54 +37,54 @@
           <% if (m.Subject.status === 'inactive') { %>
             <button class="btn btn-sm btn-warning mr-2" disabled>Lihat</button>
           <% } else { %>
-            <label for="lihat-modal-<%= m.id %>" class="btn btn-sm btn-warning mr-2 modal-button">Lihat</label>
+            <label for="lihat-modal-<%= m.studentNim %>-<%= m.subjectId %>" class="btn btn-sm btn-warning mr-2 modal-button">Lihat</label>
           <% } %>
         </td>
         <td>
           <div class="flex">
-            <label for="verifikasi-modal-<%= m.id %>" class="btn btn-sm btn-primary mr-2 modal-button">Verifikasi</label>
-            <label for="tolak-modal-<%= m.id %>" class="btn btn-sm btn-error mr-2 modal-button">Tolak</label>
+            <label for="verifikasi-modal-<%= m.studentNim %>-<%= m.subjectId %>" class="btn btn-sm btn-primary mr-2 modal-button"
+              <% if (m.Subject.status === 'inactive'){ %>  disabled<% } %>
+              >Verifikasi</label>
+            <label for="tolak-modal-<%= m.studentNim %>-<%= m.subjectId %>" class="btn btn-sm btn-error mr-2 modal-button">Tolak</label>
           </div>
         </td>
       </tr>
       <!-- Modal Lihat -->
-      <input type="checkbox" id="lihat-modal-<%= m.id %>" class="modal-toggle" />
+      <input type="checkbox" id="lihat-modal-<%= m.studentNim %>-<%= m.subjectId %>" class="modal-toggle" />
       <div class="modal">
         <div class="modal-box">
           <h3 class="font-bold text-lg">Bukti Pembayaran</h3>
-          <!-- <img src="/images/logounand.png"  alt="Bukti Pembayaran" class="max-w-full"> -->
-          <img src="/uploads/<%= m.paymentProof %>"  alt="Bukti Pembayaran" class="max-w-full">
-          
+          <img src="/uploads/<%= m.paymentProof %>" alt="Bukti Pembayaran" class="max-w-full">
           <div class="modal-action">
-            <label for="lihat-modal-<%= m.id %>" class="btn btn-secondary">Tutup</label>
+            <label for="lihat-modal-<%= m.studentNim %>-<%= m.subjectId %>" class="btn btn-secondary">Tutup</label>
           </div>
         </div>
       </div>
       <!-- Modal Verifikasi -->
-      <input type="checkbox" id="verifikasi-modal-<%= m.id %>" class="modal-toggle" />
+      <input type="checkbox" id="verifikasi-modal-<%= m.studentNim %>-<%= m.subjectId %>" class="modal-toggle" />
       <div class="modal">
         <div class="modal-box">
           <h3 class="font-bold text-lg">Konfirmasi Verifikasi</h3>
-          <p>Apakah Anda yakin ingin memverifikasi pendaftaran mata kuliah <%= m.Subject.name %> untuk mahasiswa <%= m.Student.name %> (<%= m.Student.nim %>)?</p>
+          <p>Apakah Anda yakin ingin memverifikasi pendaftaran mata kuliah <%= m.Subject.name %> untuk mahasiswa <%= m.Student.name %> (<%= m.studentNim %>)?</p>
           <div class="modal-action">
-            <form action="/admin/pendaftar/verifikasi/<%= m.Student.nim %>/<%= m.Subject.id %>" method="post">
+            <form action="/admin/pendaftar/verifikasi/<%= m.studentNim %>/<%= m.subjectId %>" method="post">
               <button type="submit" class="btn btn-primary">Ya, Verifikasi</button>
             </form>
-            <label for="verifikasi-modal-<%= m.id %>" class="btn btn-secondary">Batal</label>
+            <label for="verifikasi-modal-<%= m.studentNim %>-<%= m.subjectId %>" class="btn btn-secondary">Batal</label>
           </div>
         </div>
       </div>
       <!-- Modal Tolak -->
-      <input type="checkbox" id="tolak-modal-<%= m.id %>" class="modal-toggle" />
+      <input type="checkbox" id="tolak-modal-<%= m.studentNim %>-<%= m.subjectId %>" class="modal-toggle" />
       <div class="modal">
         <div class="modal-box">
           <h3 class="font-bold text-lg">Konfirmasi Penolakan</h3>
-          <p>Apakah Anda yakin ingin menolak pendaftaran mata kuliah <%= m.Subject.name %> untuk mahasiswa <%= m.Student.name %> (<%= m.Student.nim %>)?</p>
+          <p>Apakah Anda yakin ingin menolak pendaftaran mata kuliah <%= m.Subject.name %> untuk mahasiswa <%= m.Student.name %> (<%= m.studentNim %>)?</p>
           <div class="modal-action">
-            <form action="/admin/pendaftar/tolak/<%= m.Student.nim %>/<%= m.Subject.id %>" method="post">
+            <form action="/admin/pendaftar/tolak/<%= m.studentNim %>/<%= m.subjectId %>" method="post">
               <button type="submit" class="btn btn-error">Ya, Tolak</button>
             </form>
-            <label for="tolak-modal-<%= m.id %>" class="btn btn-secondary">Batal</label>
+            <label for="tolak-modal-<%= m.studentNim %>-<%= m.subjectId %>" class="btn btn-secondary">Batal</label>
           </div>
         </div>
       </div>

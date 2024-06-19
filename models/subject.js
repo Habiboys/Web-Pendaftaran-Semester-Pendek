@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       Subject.belongsTo(models.Lecturer, { foreignKey: 'lecturerNip'});
       Subject.hasMany(models.Schedule, { onDelete: 'CASCADE', foreignKey: 'subjectId'});
       Subject.hasMany(models.Registration, {onDelete: 'CASCADE',   foreignKey: 'subjectId'});
+      Subject.hasMany(models.Notification, {onDelete: 'CASCADE',   foreignKey: 'subjectId'});
       
     }
   }

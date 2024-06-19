@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const { User } = require("../models/index");
 const {body, validationResult } = require('express-validator');
 require('dotenv').config();
@@ -85,6 +85,8 @@ const logout = async (req, res) => {
   res.clearCookie("refreshToken");
   res.redirect("/");
 };
+
+
 
 module.exports = {
   form,
