@@ -5,10 +5,89 @@ const {
   Registration,
   Student,
   Schedule,
+  Notification,
 } = require("../models/index");
-const { Op } = require("sequelize");
+require("dotenv").config();
 
+const { Op } = require("sequelize");
+const PushNotifications = require("@pusher/push-notifications-server");
 const { body, validationResult } = require("express-validator");
+
+const beamsClient = new PushNotifications({
+  instanceId: process.env.INSTANCE_ID,
+  secretKey: process.env.PUSHER_SECRET_KEY,
+});
+
+const sendNotificationAll = async (title, body, deep_link, subjectId) => {
+  try {
+    const publishResponse = await beamsClient.publishToInterests(["daftarsp"], {
+      web: {
+        notification: {
+          title: title,
+          body: body,
+          deep_link: deep_link,
+        },
+      },
+    });
+    console.log("Just published:", publishResponse.publishId);
+    const students = await Student.findAll({ attributes: ["nim"] });
+
+    for (const s of students) {
+      await Notification.create({
+        title: title,
+        message: body,
+        subjectId: subjectId,
+        studentNim: s.nim,
+      });
+    }
+  } catch (error) {
+    console.log("Error:", error);
+  }
+};
+const sendNotificationUser = async (
+  userId,
+  title,
+  body,
+  deep_link,
+  subjectId,
+  studentNim
+) => {
+  try {
+    // Validate userId
+    if (!userId) {
+      throw new Error("User ID is missing.");
+    }
+
+    // Validate other parameters if needed
+    // ...
+
+    const publishResponse = await beamsClient.publishToUsers([userId], {
+      web: {
+        notification: {
+          title: title,
+          body: body,
+          deep_link: deep_link,
+        },
+      },
+    });
+
+    console.log("Just published:", publishResponse.publishId);
+    console.log("Just published id:", userId);
+
+    await Notification.create({
+      title: title,
+      message: body,
+      subjectId: subjectId,
+      studentNim: studentNim,
+    });
+  } catch (error) {
+    console.log(
+      "Error while sending notification to user:",
+      error.message,
+      error
+    );
+  }
+};
 
 const view_profile = async (req, res) => {
   const user = await User.findByPk(req.userId);
@@ -17,18 +96,45 @@ const view_profile = async (req, res) => {
 
 const dashboard = async (req, res) => {
   const user = await User.findByPk(req.userId);
-  res.render("admin/dashboard", { user, page: "Dashboard" });
-};
 
+  const totalmatkul = await Subject.count();
+  const pendaftar = await Registration.count({
+    where: { status: "unverified" },
+  });
+  const mhsaktif = await Registration.count({
+    where: { status: "verified" },
+  });
+  const matkulaktif = await Subject.count({
+    where: { status: "active" },
+  });
+  const matkulnonaktif = await Subject.count({
+    where: { status: "inactive" },
+  });
+
+  res.render("admin/dashboard", {
+    user,
+    page: "Dashboard",
+    totalmatkul,
+    matkulnonaktif,
+    matkulaktif,
+    mhsaktif,
+    pendaftar,
+  });
+};
 const matkul = async (req, res) => {
   const user = await User.findByPk(req.userId);
-  const matkul = await Subject.findAll({ include: Lecturer });
+  const matkul = await Subject.findAll({
+    include: [Lecturer],
+    order: [
+      ["createdAt", "ASC"], // Urutkan berdasarkan createdAt secara descending
+    ],
+  });
 
   for (const m of matkul) {
     const jumlahPendaftar = await Registration.count({
       where: { subjectId: m.id },
     });
-    m.dataValues.jumlahPendaftar = jumlahPendaftar;
+    m.jumlahPendaftar = jumlahPendaftar;
   }
 
   res.render("admin/matkul", {
@@ -95,32 +201,32 @@ const storeMatkul = [
     .withMessage("Kapasitas minimal 10"),
 
   async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      let error = errors.array();
-      res.cookie("error", error, { maxAge: 1000, httpOnly: true });
-      return res.redirect("/admin/tambah-matkul");
-    }
-    const { id, name, credit, semester, lecturerId, capacity } = req.body;
-
-    const subjects = await Subject.findAll({
-      where: {
-        lecturerNip: lecturerId,
-      },
-    });
-    
-    let maxSKS = 0;
-    for (const subject of subjects) {
-      maxSKS += subject.credit;
-    }
-
-    if (maxSKS + credit > 6) {
-      res.cookie("maxsks", "Total SKS yang diambil dosen ini melebihi batas maksimal 6 SKS", { maxAge: 1000, httpOnly: true });
-      return res.redirect("/admin/tambah-matkul");
-    }
-
-
     try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        let error = errors.array();
+        res.cookie("error", error, { maxAge: 1000, httpOnly: true });
+        return res.redirect("/admin/tambah-matkul");
+      }
+      const { id, name, credit, semester, lecturerId, capacity } = req.body;
+      const subjects = await Subject.findAll({
+        where: {
+          lecturerNip: lecturerId,
+        },
+      });
+      let maxSKS = 0;
+      for (const subject of subjects) {
+        maxSKS += subject.credit;
+      }
+      if (maxSKS + parseInt(credit) > 6) {
+        res.cookie(
+          "maxsks",
+          "Total SKS yang diambil dosen ini melebihi batas maksimal 6 SKS",
+          { maxAge: 1000, httpOnly: true }
+        );
+        return res.redirect("/admin/tambah-matkul");
+      }
+
       await Subject.create({
         id,
         name,
@@ -129,11 +235,20 @@ const storeMatkul = [
         lecturerNip: lecturerId,
         capacity,
       });
-      let success = "Mata Kuliah Berhasil Ditambahkan";
-      res.cookie("success", success, { maxAge: 1000, httpOnly: true });
-      res.redirect("/admin/mata-kuliah");
+
+      sendNotificationAll(
+        "Pendaftaran Telah Dibuka",
+        `Pendaftaran matakuliah ${name} telah dibuka`,
+        `${process.env.BASE_URL}/mata-kuliah/daftar/${id}`,
+        id
+      );
+      res.cookie("success", "Mata Kuliah Berhasil Ditambahkan", {
+        maxAge: 1000,
+        httpOnly: true,
+      });
+      return res.redirect("/admin/mata-kuliah");
     } catch (error) {
-      console.error(error);
+      console.error("Gagal membuat mata kuliah:", error);
       res.status(500).send("Terjadi kesalahan saat menyimpan data");
     }
   },
@@ -200,17 +315,20 @@ const updateMatkul = [
         lecturerNip: lecturerId,
       },
     });
-    
+
     let maxSKS = 0;
     for (const subject of subjects) {
       maxSKS += subject.credit;
     }
 
     if (maxSKS + credit > 6) {
-      res.cookie("maxsks", "Total SKS yang diambil dosen ini melebihi batas maksimal 6 SKS", { maxAge: 1000, httpOnly: true });
+      res.cookie(
+        "maxsks",
+        "Total SKS yang diambil dosen ini melebihi batas maksimal 6 SKS",
+        { maxAge: 1000, httpOnly: true }
+      );
       return res.redirect("/admin/tambah-matkul");
     }
-
 
     try {
       const subject = await Subject.findByPk(req.params.id);
@@ -248,15 +366,48 @@ const tutupMatkul = async (req, res) => {
   });
 
   if (jumlahPendaftar < 10) {
-    res.cookie("error", "Mata Kuliah tidak dapat ditutup karena pendaftarnya kurang dari 10", { maxAge: 1000, httpOnly: true });
+    res.cookie(
+      "error",
+      "Mata Kuliah tidak dapat ditutup karena pendaftarnya kurang dari 10",
+      { maxAge: 1000, httpOnly: true }
+    );
     return res.redirect("/admin/mata-kuliah");
   }
 
+  const mahasiswa = await Student.findAll();
+
+  for (const mhs of mahasiswa) {
+    const hasRegistered = await Registration.findOne({
+      where: {
+        studentNim: mhs.nim,
+        subjectId: subject.id,
+      },
+    });
+
+    let pesan;
+    if (hasRegistered) {
+      pesan = `Mata kuliah ${subject.name} sudah ditutup Silahkan upload bukti pembayaran anda untuk proses berikutnya`;
+    } else {
+      pesan = `Mata kuliah ${subject.name} sudah ditutup`;
+    }
+
+    sendNotificationUser(
+      mhs.userId.toString(),
+      "Penutupan Matakuliah",
+      pesan,
+      `${process.env.BASE_URL}/mata-kuliah/daftar/${subject.id}`,
+      subject.id,
+      mhs.nim
+    );
+  }
   subject.update({
     status: "active",
   });
-  let success = "Mata Kuliah Berhasil Di Tutup";
-  res.cookie("success", success, { maxAge: 1000, httpOnly: true });
+
+  res.cookie("success", "Mata Kuliah Berhasil Di Tutup", {
+    maxAge: 1000,
+    httpOnly: true,
+  });
   res.redirect("/admin/mata-kuliah");
 };
 const matkulaktif = async (req, res) => {
@@ -267,6 +418,17 @@ const matkulaktif = async (req, res) => {
     },
     include: Lecturer,
   });
+
+  for (const m of matkul) {
+    const totalMhs = await Registration.count({
+      where: {
+        subjectId: m.id,
+        status: "verified",
+      },
+    });
+    m.totalMhs = totalMhs;
+  }
+
   res.render("admin/matkulaktif", {
     user,
     page: "Mata Kuliah Aktif",
@@ -277,7 +439,13 @@ const matkulaktif = async (req, res) => {
 const pendaftar = async (req, res) => {
   const user = await User.findByPk(req.userId);
   let mhs = await Registration.findAll({
+    where: {
+      status: "unverified",
+    },
     include: [Subject, Student],
+    order: [
+      ["createdAt", "ASC"], // Urutkan berdasarkan createdAt secara descending
+    ],
   });
 
   res.render("admin/Pendaftar", {
@@ -285,19 +453,67 @@ const pendaftar = async (req, res) => {
     page: "Pendaftar",
     mhs,
     success: req.cookies.success,
+    error: req.cookies.error,
   });
 };
 
+const verifikasiPendaftar = async (req, res) => {
+  const { studentNim, subjectId } = req.params;
+
+  const mhs = await Student.findByPk(studentNim);
+  const matkul = await Subject.findByPk(subjectId);
+  const pendaftar = await Registration.findOne({
+    where: {
+      studentNim: studentNim,
+      subjectId: subjectId,
+      paymentProof: {
+        [Op.ne]: null,
+      },
+    },
+  });
+  if (!pendaftar) {
+    res.cookie("error", "Gagal Memverifikasi Pendaftar", {
+      maxAge: 1000,
+      httpOnly: true,
+    });
+    return res.redirect(`/admin/pendaftar`);
+  }
+  pendaftar.status = "verified";
+  await pendaftar.save();
+  sendNotificationUser(
+    mhs.userId.toString(),
+    "Pendaftaran Sukses",
+    `Bukti Pembayaran anda telah diverifikasi, Anda telah resmi bergabung dimata kuliah ${matkul.name} `,
+    `${process.env.BASE_URL}/mata-kuliah/daftar/${subjectId}`,
+    subjectId,
+    mhs.nim
+  );
+
+  res.cookie("success", "Pendaftar Berhasi Diverifikasi", {
+    maxAge: 1000,
+    httpOnly: true,
+  });
+  return res.redirect(`/admin/pendaftar`);
+};
 const tolakPendaftar = async (req, res) => {
   const { studentNim, subjectId } = req.params;
-  const mhs = await Registration.findOne({
+  const mhs = await Student.findByPk(studentNim);
+  const matkul = await Subject.findByPk(subjectId);
+  const regis = await Registration.findOne({
     where: {
       studentNim: studentNim,
       subjectId: subjectId,
     },
   });
-  await mhs.destroy();
-
+  await regis.destroy();
+  sendNotificationUser(
+    mhs.userId.toString(),
+    "Pendaftaran Di Tolak",
+    `Bukti Pembayaran mata kuliah ${matkul.name} anda gagal diverifikasi,Jika ada kendala silahkan hubungi departemen`,
+    `${process.env.BASE_URL}/mata-kuliah/daftar/${subjectId}`,
+    subjectId,
+    mhs.nim
+  );
   res.cookie("success", "Pendaftar Berhasil di tolak", {
     maxAge: 1000,
     httpOnly: true,
@@ -520,7 +736,6 @@ const editJadwal = async (req, res) => {
       return res.redirect("/admin/mata-kuliah-aktif");
     }
 
-    // Mengambil user
     const user = await User.findByPk(req.userId);
 
     res.render("admin/editjadwal", {
@@ -555,7 +770,7 @@ const updateJadwal = [
       console.log(id);
       const matkul = await Subject.findByPk(id);
 
-      const duration = matkul.credit * 50; 
+      const duration = matkul.credit * 50;
 
       const startTime =
         parseInt(req.body.timeStart.split(":")[0]) * 60 +
@@ -613,7 +828,7 @@ const updateJadwal = [
 
       const conflictingRoomSchedule = await Schedule.findOne({
         where: {
-          id: { [Op.ne]: id }, 
+          id: { [Op.ne]: id },
           day,
           building,
           room,
@@ -645,8 +860,10 @@ const updateJadwal = [
       jadwal.room = room;
 
       await jadwal.save();
-      let success = "Jadwal Kuliah Berhasil Di Perbaharui";
-      res.cookie("success", success, { maxAge: 1000, httpOnly: true });
+      res.cookie("success", "Jadwal Kuliah Berhasil Di Perbaharui", {
+        maxAge: 1000,
+        httpOnly: true,
+      });
       res.redirect(`/admin/mata-kuliah-aktif/jadwal/${subjectId}`);
     } catch (error) {
       console.error(error);
@@ -654,6 +871,31 @@ const updateJadwal = [
     }
   },
 ];
+
+const mahasiswa = async (req, res) => {
+  const user = await User.findByPk(req.userId);
+  const { subjectId } = req.params;
+  const mhs = await Registration.findAll({
+    where: {
+      subjectId: subjectId,
+      status: "verified",
+    },
+    include: [
+      {
+        model: Student,
+        include: [User],
+      },
+    ],
+  });
+  const matkul = await Subject.findByPk(subjectId);
+
+  return res.render("admin/mahasiswa", {
+    user,
+    page: "Mahasiswa",
+    mhs,
+    matkul,
+  });
+};
 
 module.exports = {
   view_profile,
@@ -674,4 +916,6 @@ module.exports = {
   deleteJadwal,
   editJadwal,
   updateJadwal,
+  mahasiswa,
+  verifikasiPendaftar,
 };
