@@ -9,11 +9,13 @@
           <img src="images/fti.jpg" class="w-full h-32 object-cover mb-4">
           <h2 class="card-title text-lg font-semibold mb-2"><%= m.name %></h2>
           <div>
+
             <p class="text-sm text-gray-600">SKS: <%= m.credit %></p>
             <p class="text-sm text-gray-600">Semester: <%= m.semester %></p>
             <p class="text-sm text-gray-600">Pendaftar: <%= m.jumlahPendaftar %>/<%= m.capacity %></p>
           </div>
           <div class="flex justify-between mt-4">
+
             <div>
               <% if(m.status === 'inactive') { %>
                 <span class="text-primary">Buka</span>

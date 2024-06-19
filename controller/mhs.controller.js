@@ -2,10 +2,12 @@ const {
   User,
   Student,
   Subject,
+
   Lecturer,
   Registration,
   Notification,
   Schedule,
+
 } = require("../models/index");
 const jwt = require("jsonwebtoken");
 const moment = require("moment");
@@ -13,7 +15,9 @@ const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
 const { Op } = require("sequelize");
+
 const PDFDocument = require('pdfkit');
+
 require("dotenv").config();
 
 const PushNotifications = require("@pusher/push-notifications-server");
@@ -122,9 +126,11 @@ const view_matkul = async (req, res) => {
     const matkul = await Subject.findAll();
 
     for (const m of matkul) {
+
       const jumlahPendaftar = await Registration.count({
         where: { subjectId: m.id },
       });
+
       m.jumlahPendaftar = jumlahPendaftar;
     }
 
@@ -162,6 +168,7 @@ const daftarMatkul = async (req, res) => {
       paymentProof: {
         [Op.ne]: null,
       },
+
     },
   });
 
@@ -186,6 +193,7 @@ const daftarMatkul = async (req, res) => {
     success: req.cookies.success,
     userId: req.userId,
   });
+
 };
 
 const prosesDaftar = async (req, res) => {
@@ -327,6 +335,7 @@ const uploadFile = async (req, res) => {
       httpOnly: true,
     });
     return res.redirect("/mata-kuliah/daftar/" + req.params.id);
+
   });
 };
 
@@ -343,6 +352,7 @@ const notifikasi = async (req, res) => {
     order: [
       ["createdAt", "DESC"], // Urutkan berdasarkan createdAt secara descending
     ],
+
   });
   console.log(notif);
   res.render("mahasiswa/notifikasi", {
@@ -364,6 +374,7 @@ const hasRead = async (req, res) => {
 
   return res.redirect("/mata-kuliah/daftar/" + notif.subjectId);
 };
+
 
 const download = async (req, res) => {
   try {
@@ -405,8 +416,19 @@ const download = async (req, res) => {
     console.error('Error generating PDF:', error);
     res.status(500).send('Internal Server Error');
   }
+
 };
 
+const hasRead = async (req, res) => {
+  const { id } = req.params;
+
+  const notif = await Notification.findByPk(id);
+
+  notif.status = "read";
+  await notif.save();
+
+  return res.redirect("/mata-kuliah/daftar/" + notif.subjectId);
+};
 
 module.exports = {
   view_profile,
@@ -418,5 +440,7 @@ module.exports = {
   notifikasi,
   hasRead,
   authBeam,
+
   download,
+
 };
