@@ -395,12 +395,14 @@ const matkulaktif = async (req, res) => {
 
   for (const m of matkul) {
     const totalMhs = await Registration.count({
+
       where: {
         subjectId: m.id,
         status: "verified",
       },
     });
     m.totalMhs = totalMhs;
+
   }
 
   res.render("admin/matkulaktif", {
@@ -413,6 +415,7 @@ const matkulaktif = async (req, res) => {
 const pendaftar = async (req, res) => {
   const user = await User.findByPk(req.userId);
   let mhs = await Registration.findAll({
+
     where: {
       status: "unverified",
     },
@@ -427,6 +430,7 @@ const pendaftar = async (req, res) => {
     error: req.cookies.error,
   });
 };
+
 
 const verifikasiPendaftar = async (req, res) => {
   const { studentNim, subjectId } = req.params;
@@ -466,6 +470,7 @@ const verifikasiPendaftar = async (req, res) => {
   });
   return res.redirect(`/admin/pendaftar`);
 };
+
 const tolakPendaftar = async (req, res) => {
   const { studentNim, subjectId } = req.params;
     const mhs= await Student.findByPk(studentNim);
@@ -843,6 +848,7 @@ const updateJadwal = [
   },
 ];
 
+
 const mahasiswa = async (req, res) => {
   const user = await User.findByPk(req.userId);
   const { subjectId } = req.params;
@@ -857,6 +863,7 @@ const mahasiswa = async (req, res) => {
         include: [User],
       },
     ],
+
   });
   const matkul = await Subject.findByPk(subjectId);
 
@@ -866,7 +873,9 @@ const mahasiswa = async (req, res) => {
     mhs,
     matkul,
   });
+
 };
+
 
 module.exports = {
   view_profile,

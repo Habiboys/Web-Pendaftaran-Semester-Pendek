@@ -119,9 +119,11 @@ const view_matkul = async (req, res) => {
     const matkul = await Subject.findAll();
 
     for (const m of matkul) {
+
       const jumlahPendaftar = await Registration.count({
         where: { subjectId: m.id },
       });
+
       m.jumlahPendaftar = jumlahPendaftar;
     }
 
@@ -159,6 +161,7 @@ const daftarMatkul = async (req, res) => {
       paymentProof: {
         [Op.ne]: null,
       },
+
     },
   });
 
@@ -183,6 +186,8 @@ const daftarMatkul = async (req, res) => {
     success: req.cookies.success,
     userId: req.userId,
   });
+
+  
 };
 
 const prosesDaftar = async (req, res) => {
