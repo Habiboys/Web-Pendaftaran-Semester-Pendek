@@ -364,16 +364,6 @@ const notifikasi = async (req, res) => {
   });
 };
 
-const hasRead = async (req, res) => {
-  const { id } = req.params;
-
-  const notif = await Notification.findByPk(id);
-
-  notif.status = "read";
-  await notif.save();
-
-  return res.redirect("/mata-kuliah/daftar/" + notif.subjectId);
-};
 
 
 const download = async (req, res) => {
@@ -420,48 +410,6 @@ const download = async (req, res) => {
 };
 
 
-const download = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const jadwal = await Schedule.findAll({
-      where: {
-        subjectId: id
-      },
-    });
-    const matkul = await Subject.findByPk(id,{
-      include:[Lecturer]
-    })
-
-    // Buat dokumen PDF baru
-    const doc = new PDFDocument();
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename="jadwal-kuliah-Sp-${matkul.name}.pdf"`);
-
-    // Pipe output PDF ke response
-    doc.pipe(res);
-
-    // Tambahkan konten ke PDF
-    doc.fontSize(20).text(`Jadwal Kuliah Semester Pendek ${matkul.name}`, { align: 'center' });
-    doc.moveDown(0.1);
-    doc.fontSize(12).text(`Dosen Pengampu: ${matkul.Lecturer.name}`, { align: 'center' });
-    doc.moveDown(2);
-
-    jadwal.forEach((schedule, index) => {
-      doc.fontSize(12).text(`${index + 1}. Hari: ${schedule.day}`);
-      doc.text(`   Pukul: ${schedule.timeStart.split(':').slice(0, 2).join(':')} s/d ${schedule.timeEnd.split(':').slice(0, 2).join(':')}`);
-      doc.text(`   Gedung: ${schedule.building}`);
-      doc.text(`   Ruangan: ${schedule.room}`);
-      doc.moveDown(0.1);
-    });
-
-    // Selesaikan dokumen
-    doc.end();
-  } catch (error) {
-    console.error('Error generating PDF:', error);
-    res.status(500).send('Internal Server Error');
-  }
-
-};
 
 const hasRead = async (req, res) => {
   const { id } = req.params;
