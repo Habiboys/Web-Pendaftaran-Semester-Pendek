@@ -96,12 +96,39 @@ const view_profile = async (req, res) => {
 
 const dashboard = async (req, res) => {
   const user = await User.findByPk(req.userId);
-  res.render("admin/dashboard", { user, page: "Dashboard" });
-};
 
+  const totalmatkul = await Subject.count();
+  const pendaftar = await Registration.count({
+    where: { status: "unverified" },
+  });
+  const mhsaktif = await Registration.count({
+    where: { status: "verified" },
+  });
+  const matkulaktif = await Subject.count({
+    where: { status: "active" },
+  });
+  const matkulnonaktif = await Subject.count({
+    where: { status: "inactive" },
+  });
+
+  res.render("admin/dashboard", {
+    user,
+    page: "Dashboard",
+    totalmatkul,
+    matkulnonaktif,
+    matkulaktif,
+    mhsaktif,
+    pendaftar,
+  });
+};
 const matkul = async (req, res) => {
   const user = await User.findByPk(req.userId);
-  const matkul = await Subject.findAll({ include: Lecturer });
+  const matkul = await Subject.findAll({
+    include: [Lecturer],
+    order: [
+      ["createdAt", "ASC"], // Urutkan berdasarkan createdAt secara descending
+    ],
+  });
 
   for (const m of matkul) {
     const jumlahPendaftar = await Registration.count({
@@ -359,8 +386,9 @@ const tutupMatkul = async (req, res) => {
 
     let pesan;
     if (hasRegistered) {
-      pesan =
-        `Mata kuliah ${subject.name} sudah ditutup Silahkan upload bukti pembayaran anda untuk proses berikutnya`;
+
+      pesan = `Mata kuliah ${subject.name} sudah ditutup Silahkan upload bukti pembayaran anda untuk proses berikutnya`;
+
     } else {
       pesan = `Mata kuliah ${subject.name} sudah ditutup`;
     }
@@ -420,6 +448,9 @@ const pendaftar = async (req, res) => {
       status: "unverified",
     },
     include: [Subject, Student],
+    order: [
+      ["createdAt", "ASC"], // Urutkan berdasarkan createdAt secara descending
+    ],
   });
 
   res.render("admin/Pendaftar", {
@@ -435,8 +466,8 @@ const pendaftar = async (req, res) => {
 const verifikasiPendaftar = async (req, res) => {
   const { studentNim, subjectId } = req.params;
 
-  const mhs= await Student.findByPk(studentNim);
-  const matkul= await Subject.findByPk(subjectId);
+  const mhs = await Student.findByPk(studentNim);
+  const matkul = await Subject.findByPk(subjectId);
   const pendaftar = await Registration.findOne({
     where: {
       studentNim: studentNim,
@@ -470,17 +501,22 @@ const verifikasiPendaftar = async (req, res) => {
   });
   return res.redirect(`/admin/pendaftar`);
 };
-
 const tolakPendaftar = async (req, res) => {
   const { studentNim, subjectId } = req.params;
-    const mhs= await Student.findByPk(studentNim);
-  const matkul= await Subject.findByPk(subjectId);
+  const mhs = await Student.findByPk(studentNim);
+  const matkul = await Subject.findByPk(subjectId);
   const regis = await Registration.findOne({
+
     where: {
       studentNim: studentNim,
       subjectId: subjectId,
+      paymentProof: {
+        [Op.ne]: null,
+      },
     },
   });
+
+
   await regis.destroy();
   sendNotificationUser(
     mhs.userId.toString(),

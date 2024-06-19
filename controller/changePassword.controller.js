@@ -1,6 +1,6 @@
 // Import model User
 const { User, Lecturer, Student } = require("../models");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const { body, validationResult } = require("express-validator");
 
 // Endpoint untuk mengubah password

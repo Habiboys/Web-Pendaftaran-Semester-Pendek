@@ -15,6 +15,7 @@ router.get('/mata-kuliah', controller.view_matkul);
 router.get('/mata-kuliah/daftar/:id', verifyUser('mahasiswa'),controller.daftarMatkul);
 router.post('/mata-kuliah/daftar/:id',verifyUser('mahasiswa'), controller.prosesDaftar);
 router.post('/mata-kuliah/daftar/:id/upload',verifyUser('mahasiswa'),controller.uploadFile);
+router.post('/mata-kuliah/daftar/:id/download',verifyUser('mahasiswa'),controller.download);
 
 router.get('/notifikasi', verifyUser('mahasiswa'), controller.notifikasi);
 router.get('/notifikasi/read/:id', verifyUser('mahasiswa'), controller.hasRead);

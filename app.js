@@ -13,6 +13,7 @@ var dosenRouter = require('./routes/dosen.route');
 var authRouter = require('./routes/auth.route');
 var app = express();
 
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(logger('dev'));
@@ -21,6 +22,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 app.use('/', mhsRouter);
 app.use('/auth', authRouter);
