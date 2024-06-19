@@ -516,7 +516,6 @@ const tolakPendaftar = async (req, res) => {
     },
   });
 
-
   await regis.destroy();
   sendNotificationUser(
     mhs.userId.toString(),
