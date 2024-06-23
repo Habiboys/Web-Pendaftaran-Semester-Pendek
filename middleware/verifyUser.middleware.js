@@ -54,13 +54,13 @@ function verifyUser(role) {
           req.userRole = decoded.role;
           req.userEmail = decoded.email;
           if (role && req.userRole !== role) {
-            // if (req.userRole == "mahasiswa") {
-            //   return res.redirect("/home");
-            // } else if (req.userRole == "dosen") {
-            //   return res.redirect("/dosen/dashboard");
-            // } else if (req.userRole == "admin") {
-            //   return res.redirect("/admin/dashboard");
-            // }
+            
+            
+            
+            
+            
+            
+            
             return res.render('notfound')
           }
           next();

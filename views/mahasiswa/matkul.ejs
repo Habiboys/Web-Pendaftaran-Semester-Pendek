@@ -1,21 +1,31 @@
 <%- include('layout/header') %>
 <div class="container my-10 px-16 mt-12">
   <h1 class="text-3xl font-bold mb-4 text-center">Mata Kuliah</h1>
-  <input type="text" id="searchInput" class="input input-bordered w-full mb-4" placeholder="Cari Mata Kuliah" />
+  
+  <!-- Search Form -->
+  <form method="GET" action="/mata-kuliah/search" class="mb-4 text-center">
+    <div class="mb-4 flex">
+    <input type="text" name="query" placeholder="Cari Mata Kuliah" class="px-4 py-2 border rounded  w-full" />
+    <button type="submit" class="btn btn-primary ml-2">Cari</button>
+  </div>
+  </form>
+ 
+    <!-- <input type="text" id="searchInput" class="input input-bordered w-full max-w-xs" placeholder="Cari mata kuliah...">
+    <button id="searchButton" class="btn btn-primary ml-2">Cari</button> -->
+
+
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="courseList">
     <% matkul.forEach(m => { %>
       <div class="card bg-white shadow-lg" data-course-name="<%= m.name.toLowerCase() %>">
         <div class="card-body">
-          <img src="images/fti.jpg" class="w-full h-32 object-cover mb-4">
+          <img src="/images/fti.jpg" class="w-full h-32 object-cover mb-4">
           <h2 class="card-title text-lg font-semibold mb-2"><%= m.name %></h2>
           <div>
-
             <p class="text-sm text-gray-600">SKS: <%= m.credit %></p>
             <p class="text-sm text-gray-600">Semester: <%= m.semester %></p>
             <p class="text-sm text-gray-600">Pendaftar: <%= m.jumlahPendaftar %>/<%= m.capacity %></p>
           </div>
           <div class="flex justify-between mt-4">
-
             <div>
               <% if(m.status === 'inactive') { %>
                 <span class="text-primary">Buka</span>
@@ -31,39 +41,5 @@
       </div>
     <% }) %>
   </div>
-  <div id="noResultsMessage" class="mt-4 text-center hidden">
-    <p>Mata kuliah tidak ditemukan.</p>
-  </div>
 </div>
-
-<script>
-  const searchInput = document.getElementById('searchInput');
-  const courseList = document.getElementById('courseList');
-  const noResultsMessage = document.getElementById('noResultsMessage');
-  const courses = courseList.querySelectorAll('.card');
-
-  searchInput.addEventListener('input', filterCourses);
-
-  function filterCourses() {
-    const searchTerm = searchInput.value.toLowerCase();
-    let hasResults = false;
-
-    courses.forEach(course => {
-      const courseName = course.dataset.courseName;
-      if (courseName.includes(searchTerm)) {
-        course.style.display = 'block';
-        hasResults = true;
-      } else {
-        course.style.display = 'none';
-      }
-    });
-
-    if (hasResults) {
-      noResultsMessage.classList.add('hidden');
-    } else {
-      noResultsMessage.classList.remove('hidden');
-    }
-  }
-</script>
-
 <%- include('layout/footer') %>

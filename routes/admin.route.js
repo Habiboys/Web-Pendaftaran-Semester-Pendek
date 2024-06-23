@@ -22,8 +22,8 @@ router.get('/mata-kuliah-aktif/jadwal/:id', verifyUser('admin') , controller.jad
 router.get('/mata-kuliah-aktif/jadwal/tambah-jadwal/:id', verifyUser('admin'), controller.tambahJadwal);
 router.post('/mata-kuliah-aktif/jadwal/tambah-jadwal/:id', verifyUser('admin'), controller.storeJadwal);
 router.post('/mata-kuliah-aktif/jadwal/delete-jadwal/:id', verifyUser('admin'), controller.deleteJadwal);
-router.get('/mata-kuliah-aktif/jadwal/edit-jadwal/:subjectId/:id', verifyUser('admin'), controller.editJadwal); // Route untuk menampilkan halaman edit jadwal
-router.post('/mata-kuliah-aktif/jadwal/edit-jadwal/:subjectId/:id', verifyUser('admin'), controller.updateJadwal); // Route untuk mengupdate jadwal
+router.get('/mata-kuliah-aktif/jadwal/edit-jadwal/:subjectId/:id', verifyUser('admin'), controller.editJadwal); 
+router.post('/mata-kuliah-aktif/jadwal/edit-jadwal/:subjectId/:id', verifyUser('admin'), controller.updateJadwal); 
 
 
 router.get('/pendaftar', verifyUser('admin') , controller.pendaftar); 

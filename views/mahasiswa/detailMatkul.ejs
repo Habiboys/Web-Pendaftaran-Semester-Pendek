@@ -5,6 +5,7 @@
     <h2 class="text-lg font-semibold mb-2"><%= matkul.name %></h2>
     <p class="text-sm text-gray-600">SKS: <%= matkul.credit %></p>
     <p class="text-sm text-gray-600">Semester: <%= matkul.semester %></p>
+    <p class="text-sm text-gray-600">Dosen Pengampu: <%= matkul.Lecturer.name %></p>
     <% if(!hasRegis && matkul.status==='active') { %>
     <div class="bg-red-500 text-white p-3 rounded mt-12 text-center">
       <p>Pendaftaran Sudah Ditutup</p>

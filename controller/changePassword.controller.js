@@ -1,9 +1,9 @@
-// Import model User
+
 const { User, Lecturer, Student } = require("../models");
 const bcrypt = require("bcryptjs");
 const { body, validationResult } = require("express-validator");
 
-// Endpoint untuk mengubah password
+
 const view_form = async (req, res) => {
   let role = req.userRole;
   const user = await User.findByPk(req.userId, {

@@ -53,13 +53,13 @@ const sendNotificationUser = async (
   studentNim
 ) => {
   try {
-    // Validate userId
+    
     if (!userId) {
       throw new Error("User ID is missing.");
     }
 
-    // Validate other parameters if needed
-    // ...
+    
+    
 
     const publishResponse = await beamsClient.publishToUsers([userId], {
       web: {
@@ -126,7 +126,7 @@ const matkul = async (req, res) => {
   const matkul = await Subject.findAll({
     include: [Lecturer],
     order: [
-      ["createdAt", "ASC"], // Urutkan berdasarkan createdAt secara descending
+      ["createdAt", "ASC"], 
     ],
   });
 
@@ -386,9 +386,7 @@ const tutupMatkul = async (req, res) => {
 
     let pesan;
     if (hasRegistered) {
-
       pesan = `Mata kuliah ${subject.name} sudah ditutup Silahkan upload bukti pembayaran anda untuk proses berikutnya`;
-
     } else {
       pesan = `Mata kuliah ${subject.name} sudah ditutup`;
     }
@@ -423,14 +421,12 @@ const matkulaktif = async (req, res) => {
 
   for (const m of matkul) {
     const totalMhs = await Registration.count({
-
       where: {
         subjectId: m.id,
         status: "verified",
       },
     });
     m.totalMhs = totalMhs;
-
   }
 
   res.render("admin/matkulaktif", {
@@ -443,17 +439,16 @@ const matkulaktif = async (req, res) => {
 const pendaftar = async (req, res) => {
   const user = await User.findByPk(req.userId);
   let mhs = await Registration.findAll({
-
     where: {
       status: "unverified",
     },
     include: [Subject, Student],
     order: [
-      ["createdAt", "ASC"], // Urutkan berdasarkan createdAt secara descending
+      ["createdAt", "ASC"], 
     ],
   });
 
-  res.render("admin/Pendaftar", {
+  res.render("admin/pendaftar", {
     user,
     page: "Pendaftar",
     mhs,
@@ -461,7 +456,6 @@ const pendaftar = async (req, res) => {
     error: req.cookies.error,
   });
 };
-
 
 const verifikasiPendaftar = async (req, res) => {
   const { studentNim, subjectId } = req.params;
@@ -506,7 +500,6 @@ const tolakPendaftar = async (req, res) => {
   const mhs = await Student.findByPk(studentNim);
   const matkul = await Subject.findByPk(subjectId);
   const regis = await Registration.findOne({
-
     where: {
       studentNim: studentNim,
       subjectId: subjectId,
@@ -520,7 +513,7 @@ const tolakPendaftar = async (req, res) => {
   sendNotificationUser(
     mhs.userId.toString(),
     "Pendaftaran Di Tolak",
-    `Bukti Pembayaran mata kuliah ${matkul.name} anda gagal diverifikasi,Jika ada kendala silahkan hubungi departemen`,
+    `Pendaftaran matakuliah ${matkul.name} anda ditolak, Jika ada kendala silahkan hubungi departemen`,
     `${process.env.BASE_URL}/mata-kuliah/daftar/${subjectId}`,
     subjectId,
     mhs.nim
@@ -583,11 +576,11 @@ const storeJadwal = [
       console.log(id);
       const matkul = await Subject.findByPk(id);
 
-      // Hitung durasi jadwal berdasarkan jumlah SKS
-      const duration = matkul.credit * 50; // 1 SKS = 50 menit
+      
+      const duration = matkul.credit * 50; 
       console.log(matkul);
 
-      // Hitung selisih waktu mulai dan waktu selesai dalam menit
+      
       const startTime =
         parseInt(req.body.timeStart.split(":")[0]) * 60 +
         parseInt(req.body.timeStart.split(":")[1]);
@@ -595,7 +588,7 @@ const storeJadwal = [
         parseInt(value.split(":")[0]) * 60 + parseInt(value.split(":")[1]);
       const timeDiff = endTime - startTime;
 
-      // Periksa apakah durasi jadwal sesuai dengan jumlah SKS
+      
       if (timeDiff !== duration) {
         throw new Error("Durasi jadwal tidak sesuai dengan jumlah SKS");
       }
@@ -727,7 +720,7 @@ const deleteJadwal = async (req, res) => {
 const editJadwal = async (req, res) => {
   const { subjectId, id } = req.params;
   try {
-    // Mengambil jadwal berdasarkan id
+    
     const jadwal = await Schedule.findByPk(id);
     if (!jadwal) {
       res.cookie("error", "Jadwal tidak ditemukan", {
@@ -737,7 +730,7 @@ const editJadwal = async (req, res) => {
       return res.redirect("/admin/mata-kuliah-aktif");
     }
 
-    // Mengambil mata kuliah berdasarkan subjectId
+    
     const matkul = await Subject.findByPk(subjectId);
     if (!matkul) {
       res.cookie("error", "Mata Kuliah tidak ditemukan", {
@@ -883,7 +876,6 @@ const updateJadwal = [
   },
 ];
 
-
 const mahasiswa = async (req, res) => {
   const user = await User.findByPk(req.userId);
   const { subjectId } = req.params;
@@ -898,7 +890,6 @@ const mahasiswa = async (req, res) => {
         include: [User],
       },
     ],
-
   });
   const matkul = await Subject.findByPk(subjectId);
 
@@ -908,9 +899,7 @@ const mahasiswa = async (req, res) => {
     mhs,
     matkul,
   });
-
 };
-
 
 module.exports = {
   view_profile,
